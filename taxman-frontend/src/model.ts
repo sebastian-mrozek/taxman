@@ -29,7 +29,7 @@ export type Invoice = {
   customer: string;
   dateIssued: Date;
   netValue: number;
-  gstDetail: GstDetail;
+  gstDetails: GstDetail;
   withholdingTax: WithholdingTax;
 };
 
@@ -39,7 +39,7 @@ export type Expense = {
   invoiceNumber: string;
   period: Period;
   grossValue: number;
-  gstDetail: GstDetail;
+  gstDetails: GstDetail;
 };
 
 export type Donation = {

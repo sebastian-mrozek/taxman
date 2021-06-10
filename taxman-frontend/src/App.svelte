@@ -2,31 +2,8 @@
   import type { TaxYear } from "./model";
   import { service } from "./service";
   import ListView from "./components/ListView.svelte";
-  import WithholdingTaxView from "./components/WithholdingTaxView.svelte";
-  import type { Column } from "./components/columns";
-
-  export const INVOICE_COLS: Column[] = [
-    { label: "Particulars", type: { field: "particulars" } },
-    { label: "Customer", type: { field: "customer" } },
-    { label: "Date Issued", type: { field: "dateIssued" } },
-    { label: "Net Value", type: { field: "netValue" } },
-    {
-      label: "GST",
-      type: {
-        getText: (invoice) => invoice.gstDetail.taxPercent,
-      },
-    },
-    {
-      label: "Withholding Tax",
-      type: {
-        component: WithholdingTaxView,
-        getProps: (invoice) => {
-          return { withholdingTax: invoice.withholdingTax };
-        },
-      },
-    },
-  ];
-
+  import { INVOICE_COLS } from "./components/columns-invoice";
+  import { EXPENSE_COLS } from "./components/columns-expense";
   let taxYear: TaxYear = undefined;
 
   service.get("2021", (data) => (taxYear = data));
@@ -35,7 +12,14 @@
 <div>
   {#if taxYear !== undefined}
     Tax Year: {taxYear && taxYear.setup.label}
-    <ListView items={taxYear.invoices} columns={INVOICE_COLS} />
+    <div>
+      Invoices
+      <ListView items={taxYear.invoices} columns={INVOICE_COLS} />
+    </div>
+    <div>
+      Expenses
+      <ListView items={taxYear.expenses} columns={EXPENSE_COLS} />
+    </div>
   {/if}
 </div>
 
