@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+}
+
+group 'io.septem.tax'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    annotationProcessor "io.avaje:avaje-inject-generator:$v_avaje_inject"
+    annotationProcessor "io.avaje:avaje-http-javalin-generator:$v_avaje_http"
+    annotationProcessor "org.projectlombok:lombok:$v_lombok"
+
+    compileOnly "org.projectlombok:lombok:$v_lombok"
+
+    implementation "io.javalin:javalin:$v_javalin"
+    implementation "io.avaje:avaje-inject:$v_avaje_inject"
+    implementation "io.avaje:avaje-http-api:$v_avaje_http"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$v_jackson"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$v_jackson"
+    implementation "org.slf4j:slf4j-api:$v_slf4j"
+    implementation "ch.qos.logback:logback-classic:$v_logback"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:$v_junit"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions.useIR = true
+}
