@@ -4,7 +4,12 @@ import WithholdingTaxView from "./WithholdingTaxView.svelte";
 export const INVOICE_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },
   { label: "Customer", type: { field: "customer" } },
-  { label: "Date Issued", type: { field: "dateIssued" } },
+  {
+    label: "Date Issued",
+    type: {
+      getText: (invoice) => new Date(invoice.dateIssued).toLocaleDateString(),
+    },
+  },
   { label: "Net Value", type: { field: "netValue" } },
   {
     label: "GST",
@@ -13,12 +18,7 @@ export const INVOICE_COLS: Column[] = [
     },
   },
   {
-    label: "Withholding Tax",
-    type: {
-      component: WithholdingTaxView,
-      getProps: (invoice) => {
-        return { withholdingTax: invoice.withholdingTax };
-      },
-    },
+    label: "Withholding Tax Percentage",
+    type: { field: "withholdingTaxPercent" },
   },
 ];

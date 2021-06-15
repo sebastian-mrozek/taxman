@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 @Data
 public class GstDetail {
 
-    private final BigDecimal grossTaxableAmount;
+    private final BigDecimal taxableAmount;
     private final BigDecimal taxPercent;
 
 }

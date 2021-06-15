@@ -8,5 +8,5 @@ import java.math.BigDecimal;
 public class ExpenseType {
 
     private final String name;
-    private final BigDecimal percentageDeductible;
+    private final BigDecimal percentDeductible;
 }

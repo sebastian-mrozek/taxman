@@ -15,5 +15,5 @@ public class Invoice {
     private final LocalDate dateIssued;
     private final BigDecimal netValue;
     private final GstDetail gstDetail;
-    private final WithholdingTax withholdingTax;
+    private final BigDecimal withholdingTaxPercent;
 }

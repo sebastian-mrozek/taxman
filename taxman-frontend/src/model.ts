@@ -5,7 +5,7 @@ export type Period = {
 
 export type ExpenseType = {
   name: string;
-  percentageDeductible: number;
+  percentDeductible: number;
 };
 
 export type TaxYearSetup = {
@@ -15,13 +15,8 @@ export type TaxYearSetup = {
 };
 
 export type GstDetail = {
-  grossTaxableAmount: number;
-  taxPercent: number;
-};
-
-export type WithholdingTax = {
   taxableAmount: number;
-  percentage: number;
+  taxPercent: number;
 };
 
 export type Invoice = {
@@ -30,7 +25,7 @@ export type Invoice = {
   dateIssued: Date;
   netValue: number;
   gstDetails: GstDetail;
-  withholdingTax: WithholdingTax;
+  withholdingTaxPercent: number;
 };
 
 export type Expense = {
