@@ -10,7 +10,7 @@ import jakarta.inject.Inject;
 import java.util.List;
 
 @Controller
-@Path("tax-year")
+@Path("api/tax-year")
 public class TaxYearController {
 
     private final StorageService storageService;
