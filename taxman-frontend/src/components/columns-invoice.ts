@@ -1,5 +1,4 @@
 import type { Column } from "./columns";
-import WithholdingTaxView from "./WithholdingTaxView.svelte";
 
 export const INVOICE_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },

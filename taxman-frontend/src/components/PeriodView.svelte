@@ -1,6 +1,4 @@
 <script lang="ts">
-  import App from "../App.svelte";
-
   import type { Period } from "../model";
 
   export let period: Period = undefined;

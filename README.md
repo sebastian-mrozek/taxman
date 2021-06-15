@@ -6,7 +6,6 @@ Based on a software engineering contractor life in NZ - hence NZ tax specific.
 A reason to build a Svelte app and avoid paying an accountant.
 
 TODO:
-- introduce TaxYearView component
 - svelte routing
 - gst view component
 - withholding tax component
