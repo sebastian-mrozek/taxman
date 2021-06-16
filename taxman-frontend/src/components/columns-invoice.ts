@@ -1,4 +1,6 @@
+import currency from "currency.js";
 import type { Column } from "./columns";
+import TaxView from "./TaxView.svelte";
 
 export const INVOICE_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },
@@ -9,15 +11,29 @@ export const INVOICE_COLS: Column[] = [
       getText: (invoice) => new Date(invoice.dateIssued).toLocaleDateString(),
     },
   },
-  { label: "Net Value", type: { field: "netValue" } },
+  { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },
   {
     label: "GST",
     type: {
-      getText: (invoice) => invoice.gstDetail.taxPercent,
+      component: TaxView,
+      getProps: (invoice) => {
+        return {
+          taxableAmount: invoice.netValue,
+          taxPercent: invoice.gstDetail.taxPercent,
+        };
+      },
     },
   },
   {
-    label: "Withholding Tax Percentage",
-    type: { field: "withholdingTaxPercent" },
+    label: "Withholding Tax",
+    type: {
+      component: TaxView,
+      getProps: (invoice) => {
+        return {
+          taxableAmount: invoice.netValue,
+          taxPercent: invoice.withholdingTaxPercent,
+        };
+      },
+    },
   },
 ];

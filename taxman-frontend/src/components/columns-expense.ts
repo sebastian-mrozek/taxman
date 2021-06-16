@@ -1,5 +1,7 @@
 import type { Column } from "./columns";
 import PeriodView from "./PeriodView.svelte";
+import TaxView from "./TaxView.svelte";
+import currency from "currency.js";
 
 export const EXPENSE_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },
@@ -14,11 +16,12 @@ export const EXPENSE_COLS: Column[] = [
       },
     },
   },
-  { label: "Gross value", type: { field: "grossValue" } },
+  { label: "Gross value", type: { getText: (expense) => currency(expense.grossValue).format() } },
   {
     label: "GST",
     type: {
-      getText: (expense) => expense.gstDetail[0].taxPercent,
+      component: TaxView,
+      getProps: (invoice) => invoice.gstDetail[0],
     },
   },
 ];

@@ -7,8 +7,6 @@ A reason to build a Svelte app and avoid paying an accountant.
 
 TODO:
 - svelte routing
-- gst view component
-- withholding tax component
 - provide sample data
 - gst returns (based on how many periods there are)
 - income tax return

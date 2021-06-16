@@ -1,3 +1,4 @@
+import currency from "currency.js";
 import type { Column } from "./columns";
 import PeriodView from "./PeriodView.svelte";
 
@@ -13,5 +14,5 @@ export const DONATION_COLS: Column[] = [
       },
     },
   },
-  { label: "Value", type: { field: "value" } },
+  { label: "Value", type: { getText: (donation) => currency(donation.value).format() } },
 ];

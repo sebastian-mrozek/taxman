@@ -7,6 +7,7 @@
   let handleClick = (e) => {
     service.get(e.target.textContent, (data) => (taxYear = data));
   };
+  service.get("2021", (data) => (taxYear = data));
 </script>
 
 <nav>
