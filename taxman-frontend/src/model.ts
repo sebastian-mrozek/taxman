@@ -14,9 +14,10 @@ export type TaxYearSetup = {
   expenseTypes: ExpenseType[];
 };
 
-export type GstDetail = {
+export type TaxDetail = {
   taxableAmount: number;
   taxPercent: number;
+  taxValue: number;
 };
 
 export type Invoice = {
@@ -24,8 +25,10 @@ export type Invoice = {
   customer: string;
   dateIssued: Date;
   netValue: number;
-  gstDetails: GstDetail;
+  gstDetails: TaxDetail;
   withholdingTaxPercent: number;
+  withholdingTaxDetail: TaxDetail;
+  toPay: number;
 };
 
 export type Expense = {
@@ -34,7 +37,7 @@ export type Expense = {
   invoiceNumber: string;
   period: Period;
   grossValue: number;
-  gstDetails: GstDetail;
+  gstDetails: TaxDetail;
 };
 
 export type Donation = {

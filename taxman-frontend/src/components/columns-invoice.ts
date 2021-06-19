@@ -16,11 +16,14 @@ export const INVOICE_COLS: Column[] = [
     label: "GST",
     type: {
       component: TaxView,
-      getProps: (invoice) => {
-        return {
-          taxableAmount: invoice.netValue,
-          taxPercent: invoice.gstDetail.taxPercent,
-        };
+      getProps: (invoice) => invoice.gstDetail,
+    },
+  },
+  {
+    label: "Total",
+    type: {
+      getText: (invoice) => {
+        return currency(invoice.total).format();
       },
     },
   },
@@ -28,11 +31,14 @@ export const INVOICE_COLS: Column[] = [
     label: "Withholding Tax",
     type: {
       component: TaxView,
-      getProps: (invoice) => {
-        return {
-          taxableAmount: invoice.netValue,
-          taxPercent: invoice.withholdingTaxPercent,
-        };
+      getProps: (invoice) => invoice.withholdingTaxDetail,
+    },
+  },
+  {
+    label: "To pay",
+    type: {
+      getText: (invoice) => {
+        return currency(invoice.toPay).format();
       },
     },
   },

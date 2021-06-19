@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -14,5 +15,5 @@ public class Expense {
     private final String invoiceNumber;
     private final Period period;
     private final BigDecimal grossValue;
-    private final GstDetail gstDetail;
+    private final List<TaxDetail> gstDetail;
 }

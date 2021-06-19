@@ -5,23 +5,21 @@ import io.avaje.http.api.WebRoutes;
 import io.avaje.inject.SystemContext;
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
-import io.javalin.plugin.json.JavalinJson;
 import io.septem.tax.persistence.DataAccessException;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
 public class Application {
     private final Javalin server;
 
-    public static void main(String[] args) {
-        JavalinJackson.getObjectMapper().registerModule(new JavaTimeModule());
-        var app = new Application();
-        app.start();
-    }
-
+    @Inject
     public Application() {
+        configureObjectMapper();
         this.server = Javalin.create(cfg -> {
             cfg.enableCorsForAllOrigins();
+            //TODO: add single page root to enable routing in svelte
+//            cfg.addSinglePageRoot("/app", "/static/index.html");
 
 //         TODO: make it configurable on app startup, only allow in dev mode
 //         cfg.enableDevLogging();
@@ -31,6 +29,15 @@ public class Application {
 
         registerWebRoutes();
         registerExceptionMappers();
+    }
+
+    public static void main(String[] args) {
+        var app = new Application();
+        app.start();
+    }
+
+    public static void configureObjectMapper() {
+        JavalinJackson.getObjectMapper().registerModule(new JavaTimeModule());
     }
 
     private void registerExceptionMappers() {

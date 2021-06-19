@@ -1,11 +1,11 @@
 <script lang="ts">
   import currency from "currency.js";
-  export let taxableAmount: number;
+  export let taxValue: number;
   export let taxPercent: number;
 </script>
 
 <span>
-  <span>{currency(taxableAmount).multiply(currency(taxPercent)).divide(currency(100)).format()} </span>
+  <span>{currency(taxValue).format()} </span>
   <span class="label">{taxPercent}%</span>
 </span>
 

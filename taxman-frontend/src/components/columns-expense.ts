@@ -21,6 +21,7 @@ export const EXPENSE_COLS: Column[] = [
     label: "GST",
     type: {
       component: TaxView,
+      //TODO: Enable multiple tax details display
       getProps: (invoice) => invoice.gstDetail[0],
     },
   },

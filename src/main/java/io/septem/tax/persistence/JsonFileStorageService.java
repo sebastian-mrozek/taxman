@@ -2,6 +2,7 @@ package io.septem.tax.persistence;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.septem.tax.model.in.*;
 
@@ -54,7 +55,7 @@ public class JsonFileStorageService implements StorageService {
     @Override
     public List<Invoice> listInvoices(String label) throws DataAccessException {
         try {
-            return readList(label, INVOICES_SUFFIX);
+            return readList(label, INVOICES_SUFFIX, Invoice.class);
         } catch (IOException e) {
             throw new DataAccessException("Error reading list of invoices for " + label + " tax year", e);
         }
@@ -63,7 +64,7 @@ public class JsonFileStorageService implements StorageService {
     @Override
     public List<Expense> listExpenses(String label) throws DataAccessException {
         try {
-            return readList(label, EXPENSES_SUFFIX);
+            return readList(label, EXPENSES_SUFFIX, Expense.class);
         } catch (IOException e) {
             throw new DataAccessException("Error reading list of expenses for " + label + " tax year", e);
         }
@@ -72,7 +73,7 @@ public class JsonFileStorageService implements StorageService {
     @Override
     public List<Donation> listDonations(String label) throws DataAccessException {
         try {
-            return readList(label, DONATIONS_SUFFIX);
+            return readList(label, DONATIONS_SUFFIX, Donation.class);
         } catch (IOException e) {
             throw new DataAccessException("Error reading list of donations for " + label + " tax year", e);
         }
@@ -89,8 +90,9 @@ public class JsonFileStorageService implements StorageService {
         return this.objectMapper.readValue(fileContent, clazz);
     }
 
-    private <T> List<T> readList(String label, String suffix) throws IOException {
+    private <T> List<T> readList(String label, String suffix, Class<T> clazz) throws IOException {
         String fileContent = getFileContent(label, suffix);
-        return this.objectMapper.readValue(fileContent, new TypeReference<>() {});
+        ObjectReader listReader = objectMapper.readerForListOf(clazz);
+        return listReader.readValue(fileContent);
     }
 }
