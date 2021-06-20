@@ -53,3 +53,11 @@ export type TaxYear = {
   expenses: Expense[];
   donations: Donation[];
 };
+
+export type GstReturn = {
+  period: Period;
+  netIncome: number;
+  gstCollected: number;
+  netExpenses: number;
+  gstPaid: number;
+};
