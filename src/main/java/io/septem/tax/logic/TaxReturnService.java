@@ -2,6 +2,7 @@ package io.septem.tax.logic;
 
 import io.septem.tax.model.in.*;
 import io.septem.tax.model.out.GstReturn;
+import io.septem.tax.model.out.TaxReturn;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -9,23 +10,32 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GstReturnService {
+public class TaxReturnService {
 
-    public List<GstReturn> calculate(TaxYear taxYear) {
+    public TaxReturn calculateTaxReturn(TaxYear taxYear) {
+        return TaxReturn.builder()
+                .year(taxYear.getSetup().getLabel())
+                .gstReturns(calculateGstReturns(taxYear))
+                .netIncome(sumNetIncome(taxYear.getInvoices()))
+                .netExpenses(sumNetExpenses(taxYear.getExpenses()))
+                .build();
+    }
+
+    public List<GstReturn> calculateGstReturns(TaxYear taxYear) {
         List<GstReturn> gstReturns = new LinkedList<>();
 
         List<Period> gstReturnPeriods = taxYear.getSetup().getGstReturnPeriods();
         for (Period gstReturnPeriod : gstReturnPeriods) {
             List<Invoice> invoices = filterInvoices(taxYear.getInvoices(), gstReturnPeriod);
             List<Expense> expenses = filterExpenses(taxYear.getExpenses(), gstReturnPeriod);
-            GstReturn gstReturn = calculate(gstReturnPeriod, invoices, expenses);
+            GstReturn gstReturn = calculateGstReturn(gstReturnPeriod, invoices, expenses);
             gstReturns.add(gstReturn);
         }
 
         return gstReturns;
     }
 
-    private GstReturn calculate(Period gstReturnPeriod, List<Invoice> invoices, List<Expense> expenses) {
+    private GstReturn calculateGstReturn(Period gstReturnPeriod, List<Invoice> invoices, List<Expense> expenses) {
         return GstReturn.builder()
                 .period(gstReturnPeriod)
                 .gstCollected(sumGst(invoices, this::getTaxValue))

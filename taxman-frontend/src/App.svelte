@@ -1,17 +1,18 @@
 <script lang="ts">
   import TaxYearView from "./components/TaxYearView.svelte";
-  import type { GstReturn, TaxYear } from "./model";
+  import TaxReturnView from "./components/TaxReturnView.svelte";
+  import type { TaxReturn, TaxYear } from "./model";
   import { service } from "./service";
 
   let taxYear: TaxYear = undefined;
-  let gstReturns: GstReturn[] = undefined;
+  let taxReturn: TaxReturn = undefined;
 
   let handleClick = (e) => {
     service.getTaxYear(e.target.textContent, (data) => (taxYear = data));
-    service.getGstReturns(e.target.textContent, (data) => (gstReturns = data));
+    service.getTaxReturn(e.target.textContent, (data) => (taxReturn = data));
   };
   service.getTaxYear("2021", (data) => (taxYear = data));
-  service.getGstReturns("2021", (data) => (gstReturns = data));
+  service.getTaxReturn("2021", (data) => (taxReturn = data));
 </script>
 
 <nav>
@@ -21,6 +22,7 @@
 </nav>
 
 <TaxYearView {taxYear} />
+<TaxReturnView {taxReturn} />
 
 <style>
 </style>

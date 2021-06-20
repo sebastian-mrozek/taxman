@@ -1,9 +1,9 @@
 import axios from "axios";
-import type { TaxYear, GstReturn } from "./model";
+import type { TaxYear, GstReturn, TaxReturn } from "./model";
 
 interface TaxYearService {
   getTaxYear(label: string, onSuccess: (data: TaxYear) => void): void;
-  getGstReturns(label: string, onSuccess: (data: GstReturn[]) => void): void;
+  getTaxReturn(label: string, onSuccess: (data: TaxReturn) => void): void;
 }
 
 export const service: TaxYearService = ((): TaxYearService => {
@@ -17,8 +17,8 @@ export const service: TaxYearService = ((): TaxYearService => {
     });
   }
 
-  async function getGstReturns(label: string, onSuccess: (data: GstReturn[]) => void) {
-    restApiClient.get<GstReturn[]>(label + "/gst-returns").then((response) => {
+  async function getTaxReturn(label: string, onSuccess: (data: TaxReturn) => void) {
+    restApiClient.get<TaxReturn>(label + "/tax-return").then((response) => {
       console.log(response);
       onSuccess(response.data);
     });
@@ -26,6 +26,6 @@ export const service: TaxYearService = ((): TaxYearService => {
 
   return {
     getTaxYear,
-    getGstReturns,
+    getTaxReturn,
   };
 })();

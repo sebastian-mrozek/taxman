@@ -3,9 +3,10 @@ package io.septem.tax.web;
 import io.avaje.http.api.Controller;
 import io.avaje.http.api.Get;
 import io.avaje.http.api.Path;
-import io.septem.tax.logic.GstReturnService;
+import io.septem.tax.logic.TaxReturnService;
 import io.septem.tax.model.in.*;
 import io.septem.tax.model.out.GstReturn;
+import io.septem.tax.model.out.TaxReturn;
 import io.septem.tax.persistence.StorageService;
 import jakarta.inject.Inject;
 
@@ -16,12 +17,12 @@ import java.util.List;
 public class TaxYearController {
 
     private final StorageService storageService;
-    private final GstReturnService gstReturnService;
+    private final TaxReturnService taxReturnService;
 
     @Inject
-    public TaxYearController(StorageService storageService, GstReturnService gstReturnService) {
+    public TaxYearController(StorageService storageService, TaxReturnService taxReturnService) {
         this.storageService = storageService;
-        this.gstReturnService = gstReturnService;
+        this.taxReturnService = taxReturnService;
     }
 
     @Get("{label}")
@@ -52,7 +53,13 @@ public class TaxYearController {
     @Get("{label}/gst-returns")
     public List<GstReturn> listGstReturns(String label) {
         TaxYear taxYear = this.storageService.getTaxYear(label);
-        return gstReturnService.calculate(taxYear);
+        return taxReturnService.calculateGstReturns(taxYear);
+    }
+
+    @Get("{label}/tax-return")
+    public TaxReturn getTaxReturn(String label) {
+        TaxYear taxYear = this.storageService.getTaxYear(label);
+        return taxReturnService.calculateTaxReturn(taxYear);
     }
 
 }

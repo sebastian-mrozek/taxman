@@ -57,7 +57,17 @@ export type TaxYear = {
 export type GstReturn = {
   period: Period;
   netIncome: number;
-  gstCollected: number;
   netExpenses: number;
+  profit: number;
+  gstCollected: number;
   gstPaid: number;
+  gstBalance: number;
+};
+
+export type TaxReturn = {
+  year: string;
+  netIncome: number;
+  netExpenses: number;
+  profit: number;
+  gstReturns: GstReturn[];
 };
