@@ -37,9 +37,8 @@
   }
   .card-title {
     text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #777;
+    font-size: 1.5em;
+    font-weight: lighter;
     font-variant: small-caps;
     margin-left: 1em;
   }

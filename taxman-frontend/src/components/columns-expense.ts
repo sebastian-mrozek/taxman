@@ -6,7 +6,7 @@ import currency from "currency.js";
 export const EXPENSE_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },
   { label: "Type", type: { field: "expenseTypeName" } },
-  { label: "Number", type: { field: "invoiceNumber" } },
+  { label: "Reference no", type: { field: "invoiceNumber" } },
   {
     label: "Period",
     type: {

@@ -10,12 +10,22 @@
 
 <div>
   {#if taxReturn}
-    <div>Net Income: {currency(taxReturn.netIncome).format()}</div>
-    <div>Net Expenses: {currency(taxReturn.netExpenses).format()}</div>
-    <div>Profit: {currency(taxReturn.profit).format()}</div>
+    <div class="profit-summary">
+      <span class="labeled-value">Net Income: {currency(taxReturn.netIncome).format()}</span>
+      <span class="labeled-value">Net Expenses: {currency(taxReturn.netExpenses).format()}</span>
+      <span class="labeled-value">Profit: {currency(taxReturn.profit).format()}</span>
+    </div>
     <ListView items={taxReturn.gstReturns} columns={GST_RETURN_COLS} title="Gst Returns" />
   {/if}
 </div>
 
 <style>
+  .profit-summary {
+    text-align: center;
+  }
+  .labeled-value {
+    font-size: 1.7em;
+    font-weight: lighter;
+    margin: 1em;
+  }
 </style>

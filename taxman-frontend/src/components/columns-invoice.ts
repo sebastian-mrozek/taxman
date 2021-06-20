@@ -1,4 +1,5 @@
 import currency from "currency.js";
+import dayjs from "dayjs";
 import type { Column } from "./columns";
 import TaxView from "./TaxView.svelte";
 
@@ -8,7 +9,7 @@ export const INVOICE_COLS: Column[] = [
   {
     label: "Date Issued",
     type: {
-      getText: (invoice) => new Date(invoice.dateIssued).toLocaleDateString(),
+      getText: (invoice) => dayjs(new Date(invoice.dateIssued)).format("YYYY MMM D"),
     },
   },
   { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },

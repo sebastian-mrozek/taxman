@@ -27,6 +27,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "currency.js": "^2.0.4",
+    "dayjs": "^1.10.5",
     "sirv-cli": "^1.0.12"
   }
 }
