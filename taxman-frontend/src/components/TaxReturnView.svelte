@@ -14,22 +14,30 @@
   {#if taxReturn}
     <div class="year-title">{taxReturn.year} tax year summary</div>
     <div class="center">
-      <span class="labeled-value">Profit: {currency(taxReturn.profit).format()}</span>
-      <span class="labeled-value">Income tax: {currency(taxReturn.incomeTax).format()}</span>
-      <span class="labeled-value">Remaining income tax: {currency(taxReturn.remainingIncomeTax).format()}</span>
-      <span class="labeled-value">Effective tax percent: {currency(taxReturn.effectiveIncomeTaxPercent).format()}</span>
+      <span class="labeled-label">Profit: <span class="labeled-value">{currency(taxReturn.profit).format()}</span></span>
+      <span class="labeled-label">Income tax: <span class="labeled-value">{currency(taxReturn.incomeTax).format()}</span></span>
+      <span class="labeled-label"
+        >Remaining income tax: <span class="labeled-value">{currency(taxReturn.remainingIncomeTax).format()}</span></span
+      >
+      <span class="labeled-label"
+        >Effective tax percent: <span class="labeled-value">{currency(taxReturn.effectiveIncomeTaxPercent).format()}</span></span
+      >
     </div>
     <hr />
     <ListView items={taxReturn.invoices} columns={INVOICE_INCOME_COLS} title="Income">
       <div slot="footer">
-        <span class="labeled-value">Total Income: {currency(taxReturn.netIncome).format()}</span>
-        <span class="labeled-value">Total Income Tax Paid: {currency(taxReturn.incomeTaxPaid).format()}</span>
+        <span class="labeled-label">Total Income: <span class="labeled-value">{currency(taxReturn.netIncome).format()}</span></span>
+        <span class="labeled-label"
+          >Total Income Tax Paid: <span class="labeled-value">{currency(taxReturn.incomeTaxPaid).format()}</span></span
+        >
       </div>
     </ListView>
     <hr />
     <ListView items={taxReturn.expenseClaims} columns={EXPENSE_CLAIM_COLS} title="Expense Claims">
       <div slot="footer">
-        <span class="labeled-value">Total Expenses: {currency(taxReturn.totalExpensesClaim).format()}</span>
+        <span class="labeled-label"
+          >Total Expenses: <span class="labeled-value">{currency(taxReturn.totalExpensesClaim).format()}</span></span
+        >
       </div>
     </ListView>
     <hr />
@@ -43,10 +51,13 @@
     font-weight: lighter;
     text-align: center;
   }
-  .labeled-value {
+  .labeled-label {
     font-size: 1.7em;
     font-weight: lighter;
     margin: 1em;
+  }
+  .labeled-value {
+    font-family: "Courier New", Courier, monospace;
   }
   .center {
     text-align: center;
