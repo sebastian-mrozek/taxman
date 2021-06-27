@@ -9,7 +9,6 @@
 
 <div>
   {#if taxYear !== undefined}
-    <span>{taxYear.setup.label}</span>
     <ListView items={taxYear.invoices} columns={INVOICE_COLS} title="Invoices - detail" />
     <ListView items={taxYear.expenses} columns={EXPENSE_COLS} title="Expenses - detail" />
     <ListView items={taxYear.donations} columns={DONATION_COLS} title="Donations - detail" />

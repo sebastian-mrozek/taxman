@@ -10,7 +10,7 @@
 <div class="panel shadowed rounded bordered">
   {#if title}<div class="card-title">{title}</div>{/if}
   {#if items}
-    <table class="striped no-max">
+    <table class="striped no-max hoverable">
       <thead>
         <tr>
           {#each columns as column}
@@ -23,6 +23,11 @@
           <ListItemView {item} {columns} />
         {/each}
       </tbody>
+      <tfoot>
+        <div class="footer-slot">
+          <slot name="footer" />
+        </div>
+      </tfoot>
     </table>
   {/if}
 </div>
@@ -34,12 +39,15 @@
   .panel {
     padding: 1em;
     margin: 1em;
+    background-color: aliceblue;
   }
   .card-title {
     text-align: center;
     font-size: 1.5em;
     font-weight: lighter;
     font-variant: small-caps;
-    margin-left: 1em;
+  }
+  .footer-slot {
+    margin-top: 1em;
   }
 </style>
