@@ -41,7 +41,7 @@ public class TaxReturnService {
         for (IncomeTaxRate incomeTaxRate : incomeTaxRates) {
             if (taxable.doubleValue() > incomeTaxRate.getAbove().doubleValue()) {
                 BigDecimal taxableAtRate = taxable.subtract(incomeTaxRate.getAbove());
-                BigDecimal tax = taxableAtRate.multiply(incomeTaxRate.getRate()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                BigDecimal tax = taxableAtRate.multiply(incomeTaxRate.getRate()).divide(BigDecimal.valueOf(100.0), 3, RoundingMode.HALF_UP);
                 incomeTax = incomeTax.add(tax);
                 taxable = taxable.subtract(taxableAtRate);
             }

@@ -25,7 +25,7 @@ public class Invoice {
     }
 
     public final BigDecimal getToPay() {
-        BigDecimal withholdingTaxValue = netValue.multiply(withholdingTaxPercent).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        BigDecimal withholdingTaxValue = netValue.multiply(withholdingTaxPercent).divide(BigDecimal.valueOf(100.0), 3, RoundingMode.HALF_UP);
         return getTotal().subtract(withholdingTaxValue);
     }
 
