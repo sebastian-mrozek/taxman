@@ -79,4 +79,7 @@ export type TaxReturn = {
   gstReturns: GstReturn[];
   invoices: Invoice[];
   expenseClaims: ExpenseClaim[];
+  incomeTax: number;
+  remainingTax: number;
+  effectiveTaxPercent: number;
 };

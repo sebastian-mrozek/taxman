@@ -22,18 +22,6 @@
 </nav>
 
 {#if taxYear}
-  <div class="year-header">Tax Year: {taxYear && taxYear.setup.label}</div>
   <TaxReturnView {taxReturn} />
   <TaxYearView {taxYear} />
 {/if}
-
-<style>
-  .year-header {
-    text-align: center;
-    font-size: 2.2em;
-    font-weight: lighter;
-    padding-bottom: 0.5em;
-    margin: 1em;
-    border-bottom: 1px solid darkgray;
-  }
-</style>

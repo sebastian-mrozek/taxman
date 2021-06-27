@@ -6,6 +6,8 @@ import io.septem.tax.model.out.GstReturn;
 import io.septem.tax.model.out.TaxReturn;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +17,36 @@ import java.util.stream.Collectors;
 public class TaxReturnService {
 
     public TaxReturn calculateTaxReturn(TaxYear taxYear) {
-        return TaxReturn.builder()
+        TaxReturn taxReturnPartial = TaxReturn.builder()
                 .year(taxYear.getSetup().getLabel())
                 .invoices(taxYear.getInvoices())
                 .expenseClaims(reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses()))
                 .gstReturns(calculateGstReturns(taxYear))
                 .build();
+        // TODO: this is a quick workaround for now, creating tax return object sucks
+        BigDecimal incomeTax = calculateIncomeTax(taxYear.getSetup().getIncomeTaxRates(), taxReturnPartial.getProfit());
+        return TaxReturn.builder()
+                .year(taxReturnPartial.getYear())
+                .invoices(taxReturnPartial.getInvoices())
+                .expenseClaims(taxReturnPartial.getExpenseClaims())
+                .gstReturns(taxReturnPartial.getGstReturns())
+                .incomeTax(incomeTax)
+                .build();
+    }
+
+    private BigDecimal calculateIncomeTax(List<IncomeTaxRate> incomeTaxRates, BigDecimal profit) {
+        BigDecimal taxable = profit;
+        BigDecimal incomeTax = BigDecimal.ZERO;
+        incomeTaxRates.sort(Comparator.comparing(IncomeTaxRate::getAbove).reversed());
+        for (IncomeTaxRate incomeTaxRate : incomeTaxRates) {
+            if (taxable.doubleValue() > incomeTaxRate.getAbove().doubleValue()) {
+                BigDecimal taxableAtRate = taxable.subtract(incomeTaxRate.getAbove());
+                BigDecimal tax = taxableAtRate.multiply(incomeTaxRate.getRate()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                incomeTax = incomeTax.add(tax);
+                taxable = taxable.subtract(taxableAtRate);
+            }
+        }
+        return incomeTax;
     }
 
     private List<ExpenseClaim> reconcileExpenseClaims(List<ExpenseType> expenseTypes, List<Expense> expenses) {

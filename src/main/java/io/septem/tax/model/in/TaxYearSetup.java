@@ -10,4 +10,5 @@ public class TaxYearSetup {
     private final String label;
     private final List<Period> gstReturnPeriods;
     private final List<ExpenseType> expenseTypes;
+    private final List<IncomeTaxRate> incomeTaxRates;
 }
