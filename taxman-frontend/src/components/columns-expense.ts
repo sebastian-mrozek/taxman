@@ -22,7 +22,7 @@ export const EXPENSE_COLS: Column[] = [
     type: {
       component: TaxView,
       //TODO: Enable multiple tax details display
-      getProps: (invoice) => invoice.gstDetail[0],
+      getProps: (expense) => expense.gstDetails[0],
     },
   },
 ];

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import App from "../App.svelte";
   import type { Column } from "./columns";
   import { isFieldValue, isComponent, isFieldFunction } from "./columns";
 

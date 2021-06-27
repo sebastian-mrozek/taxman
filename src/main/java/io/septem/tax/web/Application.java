@@ -1,21 +1,19 @@
 package io.septem.tax.web;
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.avaje.http.api.WebRoutes;
 import io.avaje.inject.SystemContext;
 import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJackson;
 import io.septem.tax.persistence.DataAccessException;
-import jakarta.inject.Inject;
 
 import java.util.List;
 
 public class Application {
     private final Javalin server;
 
-    @Inject
-    public Application() {
-        configureObjectMapper();
+    public Application(ObjectMapper objectMapper) {
+        JavalinJackson.configure(objectMapper);
         this.server = Javalin.create(cfg -> {
             cfg.enableCorsForAllOrigins();
             //TODO: add single page root to enable routing in svelte
@@ -32,12 +30,8 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        var app = new Application();
+        var app = new Application(new ServiceFactory().newObjectMapper());
         app.start();
-    }
-
-    public static void configureObjectMapper() {
-        JavalinJackson.getObjectMapper().registerModule(new JavaTimeModule());
     }
 
     private void registerExceptionMappers() {

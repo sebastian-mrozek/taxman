@@ -25,7 +25,7 @@ export type Invoice = {
   customer: string;
   dateIssued: Date;
   netValue: number;
-  gstDetails: TaxDetail;
+  gstDetail: TaxDetail;
   withholdingTaxPercent: number;
   withholdingTaxDetail: TaxDetail;
   toPay: number;
@@ -37,7 +37,7 @@ export type Expense = {
   invoiceNumber: string;
   period: Period;
   grossValue: number;
-  gstDetails: TaxDetail;
+  gstDetails: TaxDetail[];
 };
 
 export type Donation = {
@@ -64,10 +64,19 @@ export type GstReturn = {
   gstBalance: number;
 };
 
+export type ExpenseClaim = {
+  expense: Expense;
+  claimValue: number;
+  claimPercent: number;
+};
+
 export type TaxReturn = {
   year: string;
   netIncome: number;
-  netExpenses: number;
+  totalExpensesClaim: number;
   profit: number;
+  taxPaid: number;
   gstReturns: GstReturn[];
+  invoices: Invoice[];
+  expenseClaims: ExpenseClaim[];
 };

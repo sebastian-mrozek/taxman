@@ -1,5 +1,6 @@
 package io.septem.tax.model.in;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice {
 
     private final String particulars;
@@ -23,7 +25,7 @@ public class Invoice {
     }
 
     public final BigDecimal getToPay() {
-        BigDecimal withholdingTaxValue = netValue.multiply(withholdingTaxPercent).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        BigDecimal withholdingTaxValue = netValue.multiply(withholdingTaxPercent).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         return getTotal().subtract(withholdingTaxValue);
     }
 

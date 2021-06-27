@@ -1,12 +1,14 @@
 package io.septem.tax.logic;
 
 import io.septem.tax.model.in.*;
+import io.septem.tax.model.out.ExpenseClaim;
 import io.septem.tax.model.out.GstReturn;
 import io.septem.tax.model.out.TaxReturn;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,9 +17,26 @@ public class TaxReturnService {
     public TaxReturn calculateTaxReturn(TaxYear taxYear) {
         return TaxReturn.builder()
                 .year(taxYear.getSetup().getLabel())
+                .invoices(taxYear.getInvoices())
+                .expenseClaims(reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses()))
                 .gstReturns(calculateGstReturns(taxYear))
-                .netIncome(sumNetIncome(taxYear.getInvoices()))
-                .netExpenses(sumNetExpenses(taxYear.getExpenses()))
+                .build();
+    }
+
+    private List<ExpenseClaim> reconcileExpenseClaims(List<ExpenseType> expenseTypes, List<Expense> expenses) {
+        Map<String, BigDecimal> expensePercentageByName = expenseTypes.stream()
+                .collect(Collectors.toMap(ExpenseType::getName, ExpenseType::getPercentDeductible));
+        return expenses.stream()
+                .filter(expense -> expensePercentageByName.containsKey(expense.getExpenseTypeName()))
+                .map(expense -> createExpenseClaim(expensePercentageByName.get(expense.getExpenseTypeName()), expense))
+                .collect(Collectors.toList());
+    }
+
+    private ExpenseClaim createExpenseClaim(BigDecimal claimPercentage, Expense expense) {
+        return ExpenseClaim.builder()
+                .claimPercent(claimPercentage)
+                .claimValue(expense.getNetValue())
+                .expense(expense)
                 .build();
     }
 
@@ -50,7 +69,7 @@ public class TaxReturnService {
     }
 
     private BigDecimal aggregateExpenseTaxValues(Expense expense) {
-        return expense.getGstDetail().stream()
+        return expense.getGstDetails().stream()
                 .map(TaxDetail::getTaxValue)
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);

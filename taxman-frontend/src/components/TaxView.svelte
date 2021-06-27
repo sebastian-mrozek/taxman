@@ -5,8 +5,12 @@
 </script>
 
 <span>
-  <span>{currency(taxValue).format()} </span>
-  <span class="label">{taxPercent}%</span>
+  {#if taxValue}
+    <span>{currency(taxValue).format()} </span>
+    <span class="label">{taxPercent}%</span>
+  {:else}
+    <span>{currency(0.0).format()} </span>
+  {/if}
 </span>
 
 <style>
