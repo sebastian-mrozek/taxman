@@ -75,11 +75,11 @@ export type TaxReturn = {
   netIncome: number;
   totalExpensesClaim: number;
   profit: number;
-  taxPaid: number;
+  incomeTaxPaid: number;
   gstReturns: GstReturn[];
   invoices: Invoice[];
   expenseClaims: ExpenseClaim[];
   incomeTax: number;
-  remainingTax: number;
-  effectiveTaxPercent: number;
+  remainingIncomeTax: number;
+  effectiveIncomeTaxPercent: number;
 };
