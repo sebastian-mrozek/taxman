@@ -16,6 +16,7 @@ public class Invoice {
     private final String particulars;
     private final String customer;
     private final LocalDate dateIssued;
+    private final LocalDate datePaid;
     private final BigDecimal netValue;
     private final TaxDetail gstDetail;
     private final BigDecimal withholdingTaxPercent;

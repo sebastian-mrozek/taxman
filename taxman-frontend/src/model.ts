@@ -75,7 +75,7 @@ export type TaxReturn = {
   netIncome: number;
   totalExpensesClaim: number;
   profit: number;
-  incomeTaxPaid: number;
+  // incomeTaxPaid: number;
   gstReturns: GstReturn[];
   invoices: Invoice[];
   expenseClaims: ExpenseClaim[];

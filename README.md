@@ -5,7 +5,10 @@ Based on a software engineering contractor life in NZ - hence NZ tax specific.
 
 A reason to build a Svelte app and avoid paying an accountant.
 
-TODO:
+TODO now:
+- figure out gst based on date paid
+
+TODO later:
 - svelte routing
 - provide sample data
 - gst returns (based on how many periods there are)

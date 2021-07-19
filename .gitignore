@@ -7,3 +7,4 @@ out/
 .idea/
 private/
 src/main/generated/
+build/
