@@ -7,30 +7,36 @@ import io.septem.tax.model.out.TaxReturn;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TaxReturnService {
 
     public TaxReturn calculateTaxReturn(TaxYear taxYear) {
-        TaxReturn taxReturnPartial = TaxReturn.builder()
-                .year(taxYear.getSetup().getLabel())
-                .invoices(taxYear.getInvoices())
-                .expenseClaims(reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses()))
-                .gstReturns(calculateGstReturns(taxYear))
-                .build();
-        // TODO: this is a quick workaround for now, creating tax return object sucks
-        BigDecimal incomeTax = calculateIncomeTax(taxYear.getSetup().getIncomeTaxRates(), taxReturnPartial.getProfit());
+        List<Invoice> invoices = taxYear.getInvoices();
+        List<ExpenseClaim> expenseClaims = reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses());
+        BigDecimal incomeTaxPaid = calculateIncomeTaxPaid(invoices);
+        BigDecimal netIncome = calculateNetIncome(invoices);
+        BigDecimal totalExpensesClaim = calculateTotalExpensesClaim(expenseClaims);
+        BigDecimal profit = netIncome.subtract(totalExpensesClaim);
+        BigDecimal incomeTax = calculateIncomeTax(taxYear.getSetup().getIncomeTaxRates(), profit);
+        BigDecimal remainingIncomeTax = incomeTax.subtract(incomeTaxPaid);
+        BigDecimal effectiveIncomeTaxPercent = calculateEffectiveIncomeTaxPercent(incomeTax, profit);
+        List<GstReturn> gstReturns = calculateGstReturns(taxYear);
+
         return TaxReturn.builder()
-                .year(taxReturnPartial.getYear())
-                .invoices(taxReturnPartial.getInvoices())
-                .expenseClaims(taxReturnPartial.getExpenseClaims())
-                .gstReturns(taxReturnPartial.getGstReturns())
+                .year(taxYear.getSetup().getLabel())
                 .incomeTax(incomeTax)
+                .invoices(invoices)
+                .expenseClaims(expenseClaims)
+                .gstReturns(gstReturns)
+                .profit(profit)
+                .totalExpensesClaim(totalExpensesClaim)
+                .netIncome(netIncome)
+                .incomeTaxPaid(incomeTaxPaid)
+                .remainingIncomeTax(remainingIncomeTax)
+                .effectiveIncomeTaxPercent(effectiveIncomeTaxPercent)
                 .build();
     }
 
@@ -81,12 +87,21 @@ public class TaxReturnService {
     }
 
     private GstReturn calculateGstReturn(Period gstReturnPeriod, List<Invoice> invoices, List<Expense> expenses) {
+        BigDecimal gstPaid = sumGst(expenses, this::aggregateExpenseTaxValues);
+        BigDecimal gstCollected = sumGst(invoices, this::getTaxValue);
+        BigDecimal netIncome = sumNetIncome(invoices);
+        BigDecimal netExpenses = sumNetExpenses(expenses);
+        BigDecimal gstBalance = gstPaid.subtract(gstCollected);
+        BigDecimal profit = netIncome.subtract(netExpenses);
+
         return GstReturn.builder()
                 .period(gstReturnPeriod)
-                .gstCollected(sumGst(invoices, this::getTaxValue))
-                .gstPaid(sumGst(expenses, this::aggregateExpenseTaxValues))
-                .netIncome(sumNetIncome(invoices))
-                .netExpenses(sumNetExpenses(expenses))
+                .gstCollected(gstCollected)
+                .gstPaid(gstPaid)
+                .netIncome(netIncome)
+                .netExpenses(netExpenses)
+                .gstBalance(gstBalance)
+                .profit(profit)
                 .build();
     }
 
@@ -133,4 +148,36 @@ public class TaxReturnService {
                 .filter(invoice -> Utils.isWithin(invoice.getDateIssued(), gstReturnPeriod))
                 .collect(Collectors.toList());
     }
+
+
+    public BigDecimal calculateEffectiveIncomeTaxPercent(BigDecimal incomeTax, BigDecimal profit) {
+        return incomeTax
+                .divide(profit, 3, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100.0));
+    }
+
+    public BigDecimal calculateIncomeTaxPaid(List<Invoice> invoices) {
+        return invoices.stream()
+                .map(Invoice::getWithholdingTaxDetail)
+                .filter(Objects::nonNull)
+                .map(TaxDetail::getTaxValue)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal calculateNetIncome(List<Invoice> invoices) {
+        return invoices.stream()
+                .map(Invoice::getNetValue)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal calculateTotalExpensesClaim(List<ExpenseClaim> expenseClaims) {
+        return expenseClaims.stream()
+                .map(ExpenseClaim::getClaimValue)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+
 }

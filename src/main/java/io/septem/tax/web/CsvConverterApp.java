@@ -19,18 +19,18 @@ public class CsvConverterApp {
     private final ServiceFactory factory = new ServiceFactory();
 
     public static void main(String[] args) throws Exception {
-        new CsvConverterApp().convert("2019", "2020", "2021");
+        new CsvConverterApp().convert(2019, 2020, 2021);
     }
 
-    public void convert(String... years) throws IOException {
-        for (String year : years) {
+    public void convert(int... years) throws IOException {
+        for (int year : years) {
             convertExpensesToCsv(year);
             convertInvoicesToCsv(year);
             convertDonationsToCsv(year);
         }
     }
 
-    private void convertInvoicesToCsv(String year) throws IOException {
+    private void convertInvoicesToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
         Mapper mapper = factory.newMapper();
@@ -41,7 +41,8 @@ public class CsvConverterApp {
         writeAsCsv(CsvInvoice.class, csvInvoices, new File("private/" + year + "-invoices.csv"));
 
     }
-    private void convertExpensesToCsv(String year) throws IOException {
+
+    private void convertExpensesToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
         Mapper mapper = factory.newMapper();
@@ -52,7 +53,8 @@ public class CsvConverterApp {
         writeAsCsv(CsvExpense.class, csvExpenses, new File("private/" + year + "-expenses.csv"));
 
     }
-    private void convertDonationsToCsv(String year) throws IOException {
+
+    private void convertDonationsToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
         Mapper mapper = factory.newMapper();

@@ -30,14 +30,14 @@ public class Mapper {
 
     public CsvInvoice invoiceToCsv(Invoice invoice) {
         return new CsvInvoice(
-                invoice.getParticulars(),
                 invoice.getCustomer(),
                 invoice.getDateIssued(),
-                invoice.getDatePaid(),
                 invoice.getNetValue(),
-                invoice.getGstDetail().getTaxableAmount(),
+                invoice.getParticulars(),
                 invoice.getGstDetail().getTaxPercent(),
-                invoice.getWithholdingTaxPercent());
+                invoice.getGstDetail().getTaxableAmount(),
+                invoice.getWithholdingTaxPercent(),
+                invoice.getDatePaid());
     }
 
     public Expense expenseFromCsv(CsvExpense csvExpense) {

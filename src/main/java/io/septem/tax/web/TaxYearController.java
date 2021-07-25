@@ -25,40 +25,40 @@ public class TaxYearController {
         this.taxReturnService = taxReturnService;
     }
 
-    @Get("{label}")
-    public TaxYear getTaxYear(String label) {
-        return storageService.getTaxYear(label);
+    @Get("{year}")
+    public TaxYear getTaxYear(int year) {
+        return storageService.getTaxYear(year);
     }
 
-    @Get("{label}/setup")
-    public TaxYearSetup getSetup(String label) {
-        return storageService.getTaxYearSetup(label);
+    @Get("{year}/setup")
+    public TaxYearSetup getSetup(int year) {
+        return storageService.getTaxYearSetup(year);
     }
 
-    @Get("{label}/invoices")
-    public List<Invoice> listInvoices(String label) {
-        return storageService.listInvoices(label);
+    @Get("{year}/invoices")
+    public List<Invoice> listInvoices(int year) {
+        return storageService.listInvoices(year);
     }
 
-    @Get("{label}/expenses")
-    public List<Expense> listExpenses(String label) {
-        return storageService.listExpenses(label);
+    @Get("{year}/expenses")
+    public List<Expense> listExpenses(int year) {
+        return storageService.listExpenses(year);
     }
 
-    @Get("{label}/donations")
-    public List<Donation> listDonations(String label) {
-        return storageService.listDonations(label);
+    @Get("{year}/donations")
+    public List<Donation> listDonations(int year) {
+        return storageService.listDonations(year);
     }
 
-    @Get("{label}/gst-returns")
-    public List<GstReturn> listGstReturns(String label) {
-        TaxYear taxYear = this.storageService.getTaxYear(label);
+    @Get("{year}/gst-returns")
+    public List<GstReturn> listGstReturns(int year) {
+        TaxYear taxYear = this.storageService.getTaxYear(year);
         return taxReturnService.calculateGstReturns(taxYear);
     }
 
-    @Get("{label}/tax-return")
-    public TaxReturn getTaxReturn(String label) {
-        TaxYear taxYear = this.storageService.getTaxYear(label);
+    @Get("{year}/tax-return")
+    public TaxReturn getTaxReturn(int year) {
+        TaxYear taxYear = this.storageService.getTaxYear(year);
         return taxReturnService.calculateTaxReturn(taxYear);
     }
 

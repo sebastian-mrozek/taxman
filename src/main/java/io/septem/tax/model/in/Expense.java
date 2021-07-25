@@ -18,6 +18,7 @@ public class Expense {
     private final Period period;
     private final BigDecimal grossValue;
     private final List<TaxDetail> gstDetails;
+    private final BigDecimal netValue;
 
     public BigDecimal getNetValue() {
         if (gstDetails == null || gstDetails.isEmpty()) {
