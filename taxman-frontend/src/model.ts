@@ -24,6 +24,7 @@ export type Invoice = {
   particulars: string;
   customer: string;
   dateIssued: Date;
+  datePaid: Date;
   netValue: number;
   gstDetail: TaxDetail;
   withholdingTaxPercent: number;

@@ -5,6 +5,12 @@ import TaxView from "./TaxView.svelte";
 
 export const INVOICE_INCOME_COLS: Column[] = [
   { label: "Particulars", type: { field: "particulars" } },
+  {
+    label: "Date Paid",
+    type: {
+      getText: (invoice) => dayjs(new Date(invoice.datePaid)).format("YYYY MMM D"),
+    },
+  },
   { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },
   {
     label: "Withholding Tax",

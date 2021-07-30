@@ -12,6 +12,12 @@ export const INVOICE_COLS: Column[] = [
       getText: (invoice) => dayjs(new Date(invoice.dateIssued)).format("YYYY MMM D"),
     },
   },
+  {
+    label: "Date Paid",
+    type: {
+      getText: (invoice) => dayjs(new Date(invoice.datePaid)).format("YYYY MMM D"),
+    },
+  },
   { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },
   {
     label: "GST",
