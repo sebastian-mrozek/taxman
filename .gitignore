@@ -6,5 +6,5 @@
 out/
 .idea/
 private/
-src/main/generated/
+taxman-backend/src/main/generated/
 build/
