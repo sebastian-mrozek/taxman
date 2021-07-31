@@ -19,6 +19,7 @@ public class Expense {
     private final BigDecimal grossValue;
     private final List<TaxDetail> gstDetails;
     private final BigDecimal netValue;
+    private final String description;
 
     public BigDecimal getNetValue() {
         if (gstDetails == null || gstDetails.isEmpty()) {

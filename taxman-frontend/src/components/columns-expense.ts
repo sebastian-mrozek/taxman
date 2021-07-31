@@ -25,4 +25,5 @@ export const EXPENSE_COLS: Column[] = [
       getProps: (expense) => expense.gstDetails[0],
     },
   },
+  { label: "Description", type: { field: "description" } },
 ];

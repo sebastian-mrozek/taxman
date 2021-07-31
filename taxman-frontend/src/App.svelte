@@ -19,6 +19,7 @@
   <button on:click={handleClick}>2019</button>
   <button on:click={handleClick}>2020</button>
   <button on:click={handleClick}>2021</button>
+  <button on:click={handleClick}>2022</button>
 </nav>
 
 {#if taxYear}

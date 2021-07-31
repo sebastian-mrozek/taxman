@@ -18,4 +18,5 @@ public class CsvExpense {
     private final BigDecimal taxPercent1;
     private final BigDecimal taxableAmount2;
     private final BigDecimal taxPercent2;
+    private final String description;
 }

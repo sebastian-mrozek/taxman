@@ -39,6 +39,7 @@ export type Expense = {
   period: Period;
   grossValue: number;
   gstDetails: TaxDetail[];
+  description: string;
 };
 
 export type Donation = {

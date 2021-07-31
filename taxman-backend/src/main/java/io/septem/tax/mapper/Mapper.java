@@ -49,7 +49,8 @@ public class Mapper {
                 .grossValue(csvExpense.getGrossValue())
                 .invoiceNumber(csvExpense.getInvoiceNumber())
                 .particulars(csvExpense.getParticulars())
-                .period(createPeriod(csvExpense.getDateFrom(), csvExpense.getDateTo()));
+                .period(createPeriod(csvExpense.getDateFrom(), csvExpense.getDateTo()))
+                .description(csvExpense.getDescription());
 
         List<TaxDetail> gstDetails = Stream.of(taxDetail1, taxDetail2).filter(Objects::nonNull).collect(Collectors.toList());
         expenseBuilder.gstDetails(gstDetails);
@@ -85,7 +86,8 @@ public class Mapper {
                 taxableAmount1,
                 taxPercent1,
                 taxableAmount2,
-                taxPercent2);
+                taxPercent2,
+                expense.getDescription());
     }
 
     public CsvDonation donationToCsv(Donation donation) {
