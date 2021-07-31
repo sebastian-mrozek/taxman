@@ -1,4 +1,4 @@
-package io.septem.tax.model.in;
+package io.septem.tax.model.input;
 
 import lombok.Data;
 

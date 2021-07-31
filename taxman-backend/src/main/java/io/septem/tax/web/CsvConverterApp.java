@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.septem.tax.mapper.Mapper;
-import io.septem.tax.model.in.TaxYear;
+import io.septem.tax.model.input.TaxYear;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;

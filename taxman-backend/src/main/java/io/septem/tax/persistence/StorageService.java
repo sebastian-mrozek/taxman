@@ -1,6 +1,6 @@
 package io.septem.tax.persistence;
 
-import io.septem.tax.model.in.*;
+import io.septem.tax.model.input.*;
 
 import java.util.List;
 

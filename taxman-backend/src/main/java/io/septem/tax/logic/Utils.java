@@ -1,6 +1,6 @@
 package io.septem.tax.logic;
 
-import io.septem.tax.model.in.Period;
+import io.septem.tax.model.input.Period;
 
 import java.time.LocalDate;
 

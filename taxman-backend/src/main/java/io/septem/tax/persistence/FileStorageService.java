@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.septem.tax.logic.Utils;
 import io.septem.tax.mapper.Mapper;
-import io.septem.tax.model.in.*;
+import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;

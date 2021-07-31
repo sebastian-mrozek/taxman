@@ -4,9 +4,9 @@ import io.avaje.http.api.Controller;
 import io.avaje.http.api.Get;
 import io.avaje.http.api.Path;
 import io.septem.tax.logic.TaxReturnService;
-import io.septem.tax.model.in.*;
-import io.septem.tax.model.out.GstReturn;
-import io.septem.tax.model.out.TaxReturn;
+import io.septem.tax.model.input.*;
+import io.septem.tax.model.output.GstReturn;
+import io.septem.tax.model.output.TaxReturn;
 import io.septem.tax.persistence.StorageService;
 import jakarta.inject.Inject;
 

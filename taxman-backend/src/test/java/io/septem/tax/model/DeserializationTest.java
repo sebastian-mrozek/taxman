@@ -2,8 +2,8 @@ package io.septem.tax.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.septem.tax.model.in.Invoice;
-import io.septem.tax.model.in.TaxDetail;
+import io.septem.tax.model.input.Invoice;
+import io.septem.tax.model.input.TaxDetail;
 import io.septem.tax.web.ServiceFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

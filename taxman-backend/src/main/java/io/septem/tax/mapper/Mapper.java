@@ -1,6 +1,6 @@
 package io.septem.tax.mapper;
 
-import io.septem.tax.model.in.*;
+import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;
