@@ -11,8 +11,8 @@
     service.getTaxYear(e.target.textContent, (data) => (taxYear = data));
     service.getTaxReturn(e.target.textContent, (data) => (taxReturn = data));
   };
-  service.getTaxYear("2021", (data) => (taxYear = data));
-  service.getTaxReturn("2021", (data) => (taxReturn = data));
+  service.getTaxYear("2022", (data) => (taxYear = data));
+  service.getTaxReturn("2022", (data) => (taxReturn = data));
 </script>
 
 <nav>

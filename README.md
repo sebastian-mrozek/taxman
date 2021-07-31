@@ -6,14 +6,13 @@ Based on a software engineering contractor life in NZ - hence NZ tax specific.
 A reason to build a Svelte app and avoid paying an accountant.
 
 TODO now:
-- add date paid on expenses
+- show details of invoices/expenses/donations in a separate view (pending router)
+- add date paid on expenses?
 - add date paid on donations?
 
 TODO later:
 - svelte routing
 - provide sample data
-- gst returns (based on how many periods there are)
-- income tax return
 - openAPI to generate both models? maybe Java => OpenAPI => Typescript?
 - persistence (h2, json?)
 - maybe remove Java, use Node and server-less?
