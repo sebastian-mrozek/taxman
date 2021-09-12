@@ -1,3 +1,13 @@
 allprojects {
     group = "io.septem.tax"
 }
+
+task buildFrontEndIntoBackend(type: Copy) {
+    doFirst {
+        delete fileTree('taxman-backend/src/main/resources/static')
+    }
+    dependsOn 'taxman-frontend:packageRunBuild'
+    from 'taxman-frontend/public'
+    into 'taxman-backend/src/main/resources/static'
+    outputs.upToDateWhen { false }
+}

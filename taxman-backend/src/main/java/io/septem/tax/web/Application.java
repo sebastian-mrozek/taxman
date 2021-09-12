@@ -16,11 +16,9 @@ public class Application {
         JavalinJackson.configure(objectMapper);
         this.server = Javalin.create(cfg -> {
             cfg.enableCorsForAllOrigins();
-// TODO: add single page root to enable routing in svelte
-//            cfg.addSinglePageRoot("/app", "/static/index.html");
 // TODO: make it configurable on app startup, only allow in dev mode
 //            cfg.enableDevLogging();
-//            cfg.addStaticFiles("/static");
+            cfg.addStaticFiles("/static");
         });
 
         registerWebRoutes();
@@ -39,6 +37,7 @@ public class Application {
     private void registerWebRoutes() {
         List<WebRoutes> webRoutes = SystemContext.context().getBeans(WebRoutes.class);
         server.routes(() -> webRoutes.forEach(WebRoutes::registerRoutes));
+
     }
 
     public void start() {
