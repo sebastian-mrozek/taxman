@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { TaxYear, GstReturn, TaxReturn } from "./model";
+import type { TaxYear, TaxReturn } from "./model";
 
 interface TaxYearService {
   getTaxYear(label: string, onSuccess: (data: TaxYear) => void): void;

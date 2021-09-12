@@ -19,9 +19,9 @@
       <span class="labeled-label"
         >Remaining income tax: <span class="labeled-value">{currency(taxReturn.remainingIncomeTax).format()}</span></span
       >
-      <!-- <span class="labeled-label"
+      <span class="labeled-label"
         >Effective tax percent: <span class="labeled-value">{currency(taxReturn.effectiveIncomeTaxPercent).format()}</span></span
-      > -->
+      >
     </div>
     <hr />
     <ListView items={taxReturn.invoices} columns={INVOICE_INCOME_COLS} title="Income">
