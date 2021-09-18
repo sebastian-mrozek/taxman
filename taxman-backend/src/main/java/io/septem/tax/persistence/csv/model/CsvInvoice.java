@@ -1,6 +1,5 @@
 package io.septem.tax.persistence.csv.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;

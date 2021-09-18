@@ -6,6 +6,10 @@ Based on a software engineering contractor life in NZ - hence NZ tax specific.
 A reason to build a Svelte app and avoid paying an accountant.
 
 TODO now:
+- configurable persistence folder location 
+- generate test data
+- tests for persistence - roundtrip test would cover ser/deser and mapping
+- lock files when writing - cleanup persistence impl
 - show details of invoices/expenses/donations in a separate view (pending router)
 - add date paid on expenses?
 - add date paid on donations?

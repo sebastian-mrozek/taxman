@@ -3,6 +3,7 @@ package io.septem.tax.persistence;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.septem.tax.logic.Utils;
@@ -32,6 +33,9 @@ public class FileStorageService implements StorageService {
     private static final String INVOICES_SUFFIX = "invoices";
     private static final String EXPENSES_SUFFIX = "expenses";
     private static final String DONATIONS_SUFFIX = "donations";
+    private static final String[] EXPENSES_COLUMNS_ORDER = new String[]{"invoiceNumber", "particulars", "expenseTypeName", "grossValue", "dateFrom", "dateTo", "taxableAmount1", "taxPercent1", "taxableAmount2", "taxPercent2", "description"};
+    private static final String[] DONATIONS_COLUMNS_ORDER = new String[]{"dateFrom", "dateTo", "organisation", "registrationNo", "value"};
+    private static final String[] INVOICES_COLUMNS_ORDER = new String[]{"customer", "dateIssued", "netValue", "particulars", "taxPercent", "taxableAmount", "withholdingTaxPercent", "datePaid"};
 
     private final Path folder;
 
@@ -69,53 +73,119 @@ public class FileStorageService implements StorageService {
         }
     }
 
-    @Override
-    public List<Invoice> listInvoices(int year) throws DataAccessException {
-        try {
-            List<CsvInvoice> csvInvoices = readListCsv(fileName(INVOICES_SUFFIX, EXTENSION_CSV), CsvInvoice.class);
-            return csvInvoices.stream()
-                    .map(modelMapper::invoiceFromCsv)
-                    .filter(isForTaxYear(year, Invoice::getDatePaid))
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            log.info("Error reading invoices: {}", e.getMessage(), e);
-            throw new DataAccessException("Error reading list of invoices for " + year + " tax year", e);
-        }
-    }
-
     private <T> Predicate<T> isForTaxYear(int year, Function<T, LocalDate> dateExtractor) {
         Period taxYearPeriod = Utils.taxYearPeriod(year);
         return element -> Utils.isWithin(dateExtractor.apply(element), taxYearPeriod);
     }
 
-    @Override
-    public List<Expense> listExpenses(int year) throws DataAccessException {
+    private List<Invoice> listInvoices() throws DataAccessException {
+        try {
+            List<CsvInvoice> csvInvoices = readListCsv(fileName(INVOICES_SUFFIX, EXTENSION_CSV), CsvInvoice.class);
+            return csvInvoices.stream()
+                    .map(modelMapper::invoiceFromCsv)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            log.info("Error reading invoices: {}", e.getMessage(), e);
+            throw new DataAccessException("Error reading list of invoices", e);
+        }
+    }
+
+    public List<Invoice> listInvoices(int year) throws DataAccessException {
+        return listInvoices().stream()
+                .filter(isForTaxYear(year, Invoice::getDatePaid))
+                .collect(Collectors.toList());
+    }
+
+    private List<Expense> listExpenses() throws DataAccessException {
         try {
             List<CsvExpense> csvExpenses = readListCsv(fileName(EXPENSES_SUFFIX, EXTENSION_CSV), CsvExpense.class);
             return csvExpenses.stream()
                     .map(modelMapper::expenseFromCsv)
-                    .filter(isForTaxYear(year, expense -> expense.getPeriod().getDateFrom()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new DataAccessException("Error reading list of expenses for " + year + " tax year", e);
+            throw new DataAccessException("Error reading list of expenses", e);
         }
     }
 
-    private String fileName(String name, String extension) {
-        return String.format("%s.%s", name, extension);
+    @Override
+    public List<Expense> listExpenses(int year) throws DataAccessException {
+        return listExpenses().stream()
+                .filter(isForTaxYear(year, expense -> expense.getPeriod().getDateFrom()))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Donation> listDonations(int year) throws DataAccessException {
+    private List<Donation> listDonations() throws DataAccessException {
         try {
             List<CsvDonation> csvDonations = readListCsv(fileName(DONATIONS_SUFFIX, EXTENSION_CSV), CsvDonation.class);
             return csvDonations.stream()
                     .map(modelMapper::donationFromCsv)
-                    .filter(isForTaxYear(year, donation -> donation.getPeriod().getDateFrom()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new DataAccessException("Error reading list of donations for " + year + " tax year", e);
+            throw new DataAccessException("Error reading list of donations", e);
         }
+    }
+
+    @Override
+    public List<Donation> listDonations(int year) throws DataAccessException {
+        return listDonations().stream()
+                .filter(isForTaxYear(year, donation -> donation.getPeriod().getDateFrom()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addInvoice(Invoice invoice) {
+        List<Invoice> invoices = listInvoices();
+        invoices.add(invoice);
+        saveInvoices(invoices);
+
+    }
+
+    @Override
+    public void saveInvoices(List<Invoice> invoices) {
+        mapToCsvAndSave(INVOICES_SUFFIX, invoices, this.modelMapper::invoiceToCsv, CsvInvoice.class, INVOICES_COLUMNS_ORDER);
+    }
+
+
+    @Override
+    public void addExpense(Expense expense) {
+        List<Expense> expenses = listExpenses();
+        expenses.add(expense);
+        saveExpenses(expenses);
+    }
+
+    @Override
+    public void saveExpenses(List<Expense> expenses) {
+        mapToCsvAndSave(EXPENSES_SUFFIX, expenses, this.modelMapper::expenseToCsv, CsvExpense.class, EXPENSES_COLUMNS_ORDER);
+    }
+
+    private <T, R> void mapToCsvAndSave(String suffix, List<T> items, Function<T, R> mapper, Class<R> csvClass, String... columnOrder) {
+        String fileName = fileName(suffix, EXTENSION_CSV);
+        List<R> csvExpenses = items.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
+        try {
+            writeAsCsv(csvClass, csvExpenses, fileName, columnOrder);
+        } catch (IOException e) {
+            throw new DataAccessException("Error writing data to " + fileName, e);
+        }
+    }
+
+
+    @Override
+    public void addDonation(Donation donation) {
+        List<Donation> donations = listDonations();
+        donations.add(donation);
+        saveDonations(donations);
+
+    }
+
+    @Override
+    public void saveDonations(List<Donation> donations) {
+        mapToCsvAndSave(DONATIONS_SUFFIX, donations, this.modelMapper::donationToCsv, CsvDonation.class, DONATIONS_COLUMNS_ORDER);
+    }
+
+    private String fileName(String name, String extension) {
+        return String.format("%s.%s", name, extension);
     }
 
     private String getFileContent(String label, String suffix, String extension) throws IOException {
@@ -148,5 +218,12 @@ public class FileStorageService implements StorageService {
                 .with(columns)
                 .readValues(fileContent);
         return iterator.readAll();
+    }
+
+    private <T> void writeAsCsv(Class<T> clazz, List<T> elements, String fileName, String... columnsOrder) throws IOException {
+        CsvSchema columns = csvMapper.schemaFor(clazz).withHeader().sortedBy(columnsOrder);
+        ObjectWriter writer = csvMapper.writer(columns);
+        Path path = Path.of(folder.toString(), fileName);
+        writer.writeValue(path.toFile(), elements);
     }
 }

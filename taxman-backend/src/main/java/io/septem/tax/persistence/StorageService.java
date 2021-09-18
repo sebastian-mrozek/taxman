@@ -17,4 +17,16 @@ public interface StorageService {
     List<Expense> listExpenses(int year) throws DataAccessException;
 
     List<Donation> listDonations(int year) throws DataAccessException;
+
+    void addInvoice(Invoice invoice);
+
+    void saveInvoices(List<Invoice> invoices);
+
+    void addExpense(Expense expense);
+
+    void saveExpenses(List<Expense> expenses);
+
+    void addDonation(Donation donation);
+
+    void saveDonations(List<Donation> donations);
 }
