@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Mapper {
+public class ModelMapper {
 
     public Invoice invoiceFromCsv(CsvInvoice csvInvoice) {
         TaxDetail taxDetail = createTaxDetail(csvInvoice.getTaxableAmount(), csvInvoice.getTaxPercent());

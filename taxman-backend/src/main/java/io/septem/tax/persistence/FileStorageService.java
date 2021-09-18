@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.septem.tax.logic.Utils;
-import io.septem.tax.mapper.Mapper;
+import io.septem.tax.mapper.ModelMapper;
 import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
@@ -38,14 +38,14 @@ public class FileStorageService implements StorageService {
 
     private final ObjectMapper objectMapper;
     private final CsvMapper csvObjectMapper;
-    private final Mapper mapper;
+    private final ModelMapper modelMapper;
 
     public FileStorageService(ServiceFactory factory, Path folder) {
         this.folder = folder;
 
         this.objectMapper = factory.newObjectMapper();
         this.csvObjectMapper = factory.newCsvObjectMapper();
-        this.mapper = factory.newMapper();
+        this.modelMapper = factory.newModelMapper();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class FileStorageService implements StorageService {
         try {
             List<CsvInvoice> csvInvoices = readListCsv(fileName(INVOICES_SUFFIX, EXTENSION_CSV), CsvInvoice.class);
             return csvInvoices.stream()
-                    .map(mapper::invoiceFromCsv)
+                    .map(modelMapper::invoiceFromCsv)
                     .filter(isForTaxYear(year, Invoice::getDatePaid))
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -95,7 +95,7 @@ public class FileStorageService implements StorageService {
         try {
             List<CsvExpense> csvExpenses = readListCsv(fileName(EXPENSES_SUFFIX, EXTENSION_CSV), CsvExpense.class);
             return csvExpenses.stream()
-                    .map(mapper::expenseFromCsv)
+                    .map(modelMapper::expenseFromCsv)
                     .filter(isForTaxYear(year, expense -> expense.getPeriod().getDateFrom()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -112,7 +112,7 @@ public class FileStorageService implements StorageService {
         try {
             List<CsvDonation> csvDonations = readListCsv(fileName(DONATIONS_SUFFIX, EXTENSION_CSV), CsvDonation.class);
             return csvDonations.stream()
-                    .map(mapper::donationFromCsv)
+                    .map(modelMapper::donationFromCsv)
                     .filter(isForTaxYear(year, donation -> donation.getPeriod().getDateFrom()))
                     .collect(Collectors.toList());
         } catch (IOException e) {

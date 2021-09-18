@@ -8,7 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.avaje.inject.Bean;
 import io.avaje.inject.Factory;
 import io.septem.tax.logic.TaxReturnService;
-import io.septem.tax.mapper.Mapper;
+import io.septem.tax.mapper.ModelMapper;
 import io.septem.tax.persistence.FileStorageService;
 import io.septem.tax.persistence.StorageService;
 
@@ -42,8 +42,8 @@ public class ServiceFactory {
     }
 
     @Bean
-    public Mapper newMapper() {
-        return new Mapper();
+    public ModelMapper newModelMapper() {
+        return new ModelMapper();
     }
 
     private void configureMapper(ObjectMapper mapper) {

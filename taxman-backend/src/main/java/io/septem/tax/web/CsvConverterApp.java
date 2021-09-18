@@ -3,7 +3,7 @@ package io.septem.tax.web;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import io.septem.tax.mapper.Mapper;
+import io.septem.tax.mapper.ModelMapper;
 import io.septem.tax.model.input.TaxYear;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
@@ -33,9 +33,9 @@ public class CsvConverterApp {
     private void convertInvoicesToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
-        Mapper mapper = factory.newMapper();
+        ModelMapper modelMapper = factory.newModelMapper();
         List<CsvInvoice> csvInvoices = taxYear.getInvoices().stream()
-                .map(mapper::invoiceToCsv)
+                .map(modelMapper::invoiceToCsv)
                 .collect(Collectors.toList());
 
         writeAsCsv(CsvInvoice.class, csvInvoices, new File("private/" + year + "-invoices.csv"));
@@ -45,9 +45,9 @@ public class CsvConverterApp {
     private void convertExpensesToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
-        Mapper mapper = factory.newMapper();
+        ModelMapper modelMapper = factory.newModelMapper();
         List<CsvExpense> csvExpenses = taxYear.getExpenses().stream()
-                .map(mapper::expenseToCsv)
+                .map(modelMapper::expenseToCsv)
                 .collect(Collectors.toList());
 
         writeAsCsv(CsvExpense.class, csvExpenses, new File("private/" + year + "-expenses.csv"));
@@ -57,9 +57,9 @@ public class CsvConverterApp {
     private void convertDonationsToCsv(int year) throws IOException {
         TaxYear taxYear = factory.newStorageService().getTaxYear(year);
 
-        Mapper mapper = factory.newMapper();
+        ModelMapper modelMapper = factory.newModelMapper();
         List<CsvDonation> csvDonations = taxYear.getDonations().stream()
-                .map(mapper::donationToCsv)
+                .map(modelMapper::donationToCsv)
                 .collect(Collectors.toList());
 
         writeAsCsv(CsvDonation.class, csvDonations, new File("private/" + year + "-donations.csv"));
