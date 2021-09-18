@@ -11,7 +11,6 @@ import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;
-import io.septem.tax.web.ServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -36,16 +35,15 @@ public class FileStorageService implements StorageService {
 
     private final Path folder;
 
-    private final ObjectMapper objectMapper;
-    private final CsvMapper csvObjectMapper;
+    private final ObjectMapper jsonMapper;
+    private final CsvMapper csvMapper;
     private final ModelMapper modelMapper;
 
-    public FileStorageService(ServiceFactory factory, Path folder) {
-        this.folder = folder;
-
-        this.objectMapper = factory.newObjectMapper();
-        this.csvObjectMapper = factory.newCsvObjectMapper();
-        this.modelMapper = factory.newModelMapper();
+    public FileStorageService(ObjectMapper jsonMapper, CsvMapper csvMapper, ModelMapper modelMapper, Path dataFolder) {
+        this.folder = dataFolder;
+        this.csvMapper = csvMapper;
+        this.jsonMapper = jsonMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -133,19 +131,19 @@ public class FileStorageService implements StorageService {
 
     private <T> T readObjectJson(String label, String suffix, Class<T> clazz) throws IOException {
         String fileContent = getFileContent(label, suffix, EXTENSION_JSON);
-        return this.objectMapper.readValue(fileContent, clazz);
+        return this.jsonMapper.readValue(fileContent, clazz);
     }
 
     private <T> List<T> readListJson(String label, String suffix, Class<T> clazz) throws IOException {
         String fileContent = getFileContent(label, suffix, EXTENSION_JSON);
-        ObjectReader listReader = objectMapper.readerForListOf(clazz);
+        ObjectReader listReader = jsonMapper.readerForListOf(clazz);
         return listReader.readValue(fileContent);
     }
 
     private <T> List<T> readListCsv(String fileName, Class<T> clazz) throws IOException {
         String fileContent = getFileContent(fileName);
-        CsvSchema columns = csvObjectMapper.schemaFor(clazz).withUseHeader(true).withComments().withHeader().withColumnReordering(true);
-        MappingIterator<T> iterator = csvObjectMapper
+        CsvSchema columns = csvMapper.schemaFor(clazz).withUseHeader(true).withComments().withHeader().withColumnReordering(true);
+        MappingIterator<T> iterator = csvMapper
                 .readerWithSchemaFor(clazz)
                 .with(columns)
                 .readValues(fileContent);

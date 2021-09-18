@@ -18,8 +18,8 @@ import java.nio.file.Path;
 public class ServiceFactory {
 
     @Bean
-    public StorageService newStorageService() {
-        return new FileStorageService(this, Path.of("private"));
+    public StorageService newStorageService(ObjectMapper jsonMapper, CsvMapper csvMapper, ModelMapper modelMapper) {
+        return new FileStorageService(jsonMapper, csvMapper, modelMapper, Path.of("private"));
     }
 
     @Bean
