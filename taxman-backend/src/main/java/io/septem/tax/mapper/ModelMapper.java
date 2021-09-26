@@ -15,16 +15,14 @@ import java.util.stream.Stream;
 public class ModelMapper {
 
     public Invoice invoiceFromCsv(CsvInvoice csvInvoice) {
-        TaxDetail taxDetail = createTaxDetail(csvInvoice.getTaxableAmount(), csvInvoice.getTaxPercent());
-
         return Invoice.builder()
                 .particulars(csvInvoice.getParticulars())
                 .customer(csvInvoice.getCustomer())
                 .dateIssued(csvInvoice.getDateIssued())
                 .datePaid(csvInvoice.getDatePaid())
+                .gstPercent(csvInvoice.getGstPercent())
                 .withholdingTaxPercent(csvInvoice.getWithholdingTaxPercent())
                 .netValue(csvInvoice.getNetValue())
-                .gstDetail(taxDetail)
                 .build();
     }
 
@@ -34,8 +32,7 @@ public class ModelMapper {
                 invoice.getDateIssued(),
                 invoice.getNetValue(),
                 invoice.getParticulars(),
-                invoice.getGstDetail().getTaxPercent(),
-                invoice.getGstDetail().getTaxableAmount(),
+                invoice.getGstPercent(),
                 invoice.getWithholdingTaxPercent(),
                 invoice.getDatePaid());
     }

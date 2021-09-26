@@ -12,8 +12,7 @@ public class CsvInvoice {
     private final LocalDate dateIssued;
     private final BigDecimal netValue;
     private final String particulars;
-    private final BigDecimal taxPercent;
-    private final BigDecimal taxableAmount;
+    private final BigDecimal gstPercent;
     private final BigDecimal withholdingTaxPercent;
     private final LocalDate datePaid;
 }

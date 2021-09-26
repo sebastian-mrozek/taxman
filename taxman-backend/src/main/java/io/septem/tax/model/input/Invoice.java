@@ -18,11 +18,12 @@ public class Invoice {
     private final LocalDate dateIssued;
     private final LocalDate datePaid;
     private final BigDecimal netValue;
-    private final TaxDetail gstDetail;
+    private final BigDecimal gstPercent;
     private final BigDecimal withholdingTaxPercent;
 
     public final BigDecimal getTotal() {
-        return netValue.add(gstDetail.getTaxValue());
+        BigDecimal gstValue = netValue.multiply(gstPercent).divide(BigDecimal.valueOf(100.0), 3, RoundingMode.HALF_UP);
+        return netValue.add(gstValue);
     }
 
     public final BigDecimal getToPay() {
@@ -32,5 +33,9 @@ public class Invoice {
 
     public final TaxDetail getWithholdingTaxDetail() {
         return new TaxDetail(this.netValue, this.withholdingTaxPercent);
+    }
+
+    public final TaxDetail getGstDetail() {
+        return new TaxDetail(this.netValue, this.gstPercent);
     }
 }

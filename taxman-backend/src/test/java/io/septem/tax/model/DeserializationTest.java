@@ -24,7 +24,7 @@ public class DeserializationTest {
     public void testInvoice() throws JsonProcessingException {
         Invoice invoice = Invoice.builder()
                 .netValue(BigDecimal.valueOf(100))
-                .gstDetail(new TaxDetail(BigDecimal.valueOf(100), BigDecimal.valueOf(15)))
+                .gstPercent(BigDecimal.valueOf(15))
                 .customer("my customer")
                 .particulars("an invoice")
                 .dateIssued(LocalDate.now()).withholdingTaxPercent(BigDecimal.valueOf(20))
