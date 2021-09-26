@@ -63,7 +63,8 @@
   }
   .active {
     font-weight: bold;
-    color: purple;
+    color: white;
+    background-color: navy;
   }
   .flow-left {
     float: left;
