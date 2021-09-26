@@ -1,28 +1,74 @@
 <script lang="ts">
-  import TaxYearView from "./components/TaxYearView.svelte";
-  import TaxReturnView from "./components/TaxReturnView.svelte";
+    import TaxReturnView from "./components/TaxReturnView.svelte";
   import type { TaxReturn, TaxYear } from "./model";
   import { service } from "./service";
+  import ListView from "./components/ListView.svelte"
+  import { INVOICE_COLS } from "./components/columns-invoice";
+  import { EXPENSE_COLS } from "./components/columns-expense";
+  import { DONATION_COLS } from "./components/columns-donations";
+
+  let years: string[] = ["2019", "2020", "2021", "2022"];
+  let currentYear = years[years.length - 1];
+
+  let views: string[] = ["Invoices", "Expenses", "Donations", "Tax Return"];
+  let currentView = views[0];
 
   let taxYear: TaxYear = undefined;
   let taxReturn: TaxReturn = undefined;
 
-  let handleClick = (e) => {
-    service.getTaxYear(e.target.textContent, (data) => (taxYear = data));
-    service.getTaxReturn(e.target.textContent, (data) => (taxReturn = data));
+  let viewSelected = (e: MouseEvent) => {
+    currentView = e.target.textContent;
   };
-  service.getTaxYear("2022", (data) => (taxYear = data));
-  service.getTaxReturn("2022", (data) => (taxReturn = data));
+
+  let yearSelected = (e: MouseEvent) => {
+    currentYear = e.target.textContent;
+    service.getTaxYear(currentYear, (data) => (taxYear = data));
+    service.getTaxReturn(currentYear, (data) => (taxReturn = data));
+  };
+  service.getTaxYear(currentYear, (data) => (taxYear = data));
+  service.getTaxReturn(currentYear, (data) => (taxReturn = data));
 </script>
 
-<nav>
-  <button on:click={handleClick}>2019</button>
-  <button on:click={handleClick}>2020</button>
-  <button on:click={handleClick}>2021</button>
-  <button on:click={handleClick}>2022</button>
-</nav>
+<main>
+  <nav>
+    <div class="flow-left">
+      {#each views as view}
+        <button on:click={viewSelected} class:active={view === currentView}>{view}</button>
+      {/each}
+    </div>
+    <div class="flow-right">
+      {#each years as year}
+        <button on:click={yearSelected} class:active={year === currentYear}>{year}</button>
+      {/each}
+    </div>
+  </nav>
+  <div class="clear">
+  {#if taxYear}
+    {#if currentView === 'Invoices'}
+      <ListView items={taxYear.invoices} columns={INVOICE_COLS} title="Invoices - detail" />
+    {:else if currentView === 'Expenses'}
+      <ListView items={taxYear.expenses} columns={EXPENSE_COLS} title="Expenses - detail" />
+    {:else if currentView === 'Donations'}
+      <ListView items={taxYear.donations} columns={DONATION_COLS} title="Donations - detail" />
+    {:else if currentView === 'Tax Return'}
+      <TaxReturnView {taxReturn} />
+    {/if}
+  {/if}
+</div>
+</main>
 
-{#if taxYear}
-  <TaxReturnView {taxReturn} />
-  <TaxYearView {taxYear} />
-{/if}
+<style>
+  .clear {
+    clear: both;
+  }
+  .active {
+    font-weight: bold;
+    color: purple;
+  }
+  .flow-left {
+    float: left;
+  }
+  .flow-right {
+    float: right;
+  }
+</style>
