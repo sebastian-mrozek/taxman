@@ -12,9 +12,15 @@ public interface StorageService {
 
     TaxYearSetup getTaxYearSetup(int year) throws DataAccessException;
 
+    List<Invoice> listInvoices() throws DataAccessException;
+
     List<Invoice> listInvoices(int year) throws DataAccessException;
 
+    List<Expense> listExpenses() throws DataAccessException;
+
     List<Expense> listExpenses(int year) throws DataAccessException;
+
+    List<Donation> listDonations() throws DataAccessException;
 
     List<Donation> listDonations(int year) throws DataAccessException;
 

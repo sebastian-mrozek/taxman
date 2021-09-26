@@ -78,7 +78,7 @@ public class FileStorageService implements StorageService {
         return element -> Utils.isWithin(dateExtractor.apply(element), taxYearPeriod);
     }
 
-    private List<Invoice> listInvoices() throws DataAccessException {
+    public List<Invoice> listInvoices() throws DataAccessException {
         try {
             List<CsvInvoice> csvInvoices = readListCsv(fileName(INVOICES_SUFFIX, EXTENSION_CSV), CsvInvoice.class);
             return csvInvoices.stream()
@@ -96,7 +96,7 @@ public class FileStorageService implements StorageService {
                 .collect(Collectors.toList());
     }
 
-    private List<Expense> listExpenses() throws DataAccessException {
+    public List<Expense> listExpenses() throws DataAccessException {
         try {
             List<CsvExpense> csvExpenses = readListCsv(fileName(EXPENSES_SUFFIX, EXTENSION_CSV), CsvExpense.class);
             return csvExpenses.stream()
@@ -114,7 +114,7 @@ public class FileStorageService implements StorageService {
                 .collect(Collectors.toList());
     }
 
-    private List<Donation> listDonations() throws DataAccessException {
+    public List<Donation> listDonations() throws DataAccessException {
         try {
             List<CsvDonation> csvDonations = readListCsv(fileName(DONATIONS_SUFFIX, EXTENSION_CSV), CsvDonation.class);
             return csvDonations.stream()
