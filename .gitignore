@@ -9,3 +9,4 @@ private/
 taxman-backend/src/main/generated/
 build/
 taxman-backend/src/main/resources/static
+sample-data

@@ -2,6 +2,7 @@ package io.septem.tax.persistence;
 
 import io.septem.tax.model.input.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StorageService {
@@ -23,6 +24,8 @@ public interface StorageService {
     List<Donation> listDonations() throws DataAccessException;
 
     List<Donation> listDonations(int year) throws DataAccessException;
+
+    void saveTaxYearSetups(List<TaxYearSetup> taxYearSetups);
 
     void addInvoice(Invoice invoice);
 

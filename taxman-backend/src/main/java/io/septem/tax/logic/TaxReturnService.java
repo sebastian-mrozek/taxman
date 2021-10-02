@@ -4,6 +4,7 @@ import io.septem.tax.model.input.*;
 import io.septem.tax.model.output.ExpenseClaim;
 import io.septem.tax.model.output.GstReturn;
 import io.septem.tax.model.output.TaxReturn;
+import jakarta.inject.Singleton;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,6 +12,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Singleton
 public class TaxReturnService {
 
     public TaxReturn calculateTaxReturn(TaxYear taxYear) {

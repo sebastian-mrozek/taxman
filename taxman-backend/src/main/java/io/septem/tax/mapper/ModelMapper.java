@@ -4,6 +4,7 @@ import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;
+import jakarta.inject.Singleton;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Singleton
 public class ModelMapper {
 
     public Invoice invoiceFromCsv(CsvInvoice csvInvoice) {

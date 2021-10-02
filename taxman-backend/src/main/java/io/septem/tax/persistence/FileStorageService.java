@@ -12,8 +12,11 @@ import io.septem.tax.model.input.*;
 import io.septem.tax.persistence.csv.model.CsvDonation;
 import io.septem.tax.persistence.csv.model.CsvExpense;
 import io.septem.tax.persistence.csv.model.CsvInvoice;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +46,7 @@ public class FileStorageService implements StorageService {
     private final CsvMapper csvMapper;
     private final ModelMapper modelMapper;
 
+    @Inject
     public FileStorageService(ObjectMapper jsonMapper, CsvMapper csvMapper, ModelMapper modelMapper, Path dataFolder) {
         this.folder = dataFolder;
         this.csvMapper = csvMapper;
@@ -170,7 +174,6 @@ public class FileStorageService implements StorageService {
         }
     }
 
-
     @Override
     public void addDonation(Donation donation) {
         List<Donation> donations = listDonations();
@@ -225,5 +228,22 @@ public class FileStorageService implements StorageService {
         ObjectWriter writer = csvMapper.writer(columns);
         Path path = Path.of(folder.toString(), fileName);
         writer.writeValue(path.toFile(), elements);
+    }
+
+    @Override
+    public void saveTaxYearSetups(List<TaxYearSetup> taxYearSetups) {
+        for (TaxYearSetup taxYearSetup : taxYearSetups) {
+            try {
+                saveTaxYearSetup(taxYearSetup);
+            } catch (IOException e) {
+                throw new DataAccessException("Failed to save tax year setup: " + taxYearSetup.getLabel(), e);
+            }
+        }
+    }
+
+    private void saveTaxYearSetup(TaxYearSetup taxYearSetup) throws IOException {
+        var fileName = String.format("%s-%s.%s", taxYearSetup.getLabel(), SETUP_SUFFIX, EXTENSION_JSON);
+        Path path = Path.of(folder.toString(), fileName);
+        jsonMapper.writeValue(path.toFile(), taxYearSetup);
     }
 }

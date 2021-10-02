@@ -9,17 +9,36 @@ import io.avaje.inject.Bean;
 import io.avaje.inject.Factory;
 import io.septem.tax.logic.TaxReturnService;
 import io.septem.tax.mapper.ModelMapper;
+import io.septem.tax.persistence.DataAccessException;
 import io.septem.tax.persistence.FileStorageService;
 import io.septem.tax.persistence.StorageService;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 @Factory
 public class ServiceFactory {
 
+    public static final String PERSISTENCE_PATH_PROPERTY_NAME = "PERSISTENCE_PATH";
+
+    private Path persistencePath() {
+        final var persistence_path = System.getenv(PERSISTENCE_PATH_PROPERTY_NAME);
+        Path path = Path.of(Objects.requireNonNullElse(persistence_path, "sample-data"));
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new DataAccessException("Failed to create folder " + path.toAbsolutePath(), e);
+            }
+        }
+        return path;
+    }
+
     @Bean
-    public StorageService newStorageService(ObjectMapper jsonMapper, CsvMapper csvMapper, ModelMapper modelMapper) {
-        return new FileStorageService(jsonMapper, csvMapper, modelMapper, Path.of("private"));
+    public StorageService fileStorageService() {
+        return new FileStorageService(newObjectMapper(), newCsvObjectMapper(), newModelMapper(), persistencePath());
     }
 
     @Bean
