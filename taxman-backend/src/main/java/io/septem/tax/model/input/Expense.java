@@ -16,17 +16,16 @@ public class Expense {
     private final String expenseTypeName;
     private final String invoiceNumber;
     private final Period period;
-    private final BigDecimal grossValue;
     private final List<TaxDetail> gstDetails;
-    private final BigDecimal netValue;
     private final String description;
 
     public BigDecimal getNetValue() {
-        if (gstDetails == null || gstDetails.isEmpty()) {
-            return grossValue;
-        } else {
-            TaxDetail taxDetail = gstDetails.get(0);
-            return grossValue.subtract(taxDetail.getTaxValue());
-        }
+        return gstDetails.stream().map(TaxDetail::getNetValue)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getGrossValue() {
+        return gstDetails.stream().map(TaxDetail::getGrossValue)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 }

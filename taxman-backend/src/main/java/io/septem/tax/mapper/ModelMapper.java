@@ -43,7 +43,6 @@ public class ModelMapper {
 
         Expense.ExpenseBuilder expenseBuilder = Expense.builder()
                 .expenseTypeName(csvExpense.getExpenseTypeName())
-                .grossValue(csvExpense.getGrossValue())
                 .invoiceNumber(csvExpense.getInvoiceNumber())
                 .particulars(csvExpense.getParticulars())
                 .period(createPeriod(csvExpense.getDateFrom(), csvExpense.getDateTo()))
@@ -79,7 +78,6 @@ public class ModelMapper {
                 expense.getInvoiceNumber(),
                 expense.getPeriod().getDateFrom(),
                 expense.getPeriod().getDateTo(),
-                expense.getGrossValue(),
                 taxableAmount1,
                 taxPercent1,
                 taxableAmount2,

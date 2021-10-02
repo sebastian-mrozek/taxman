@@ -17,4 +17,12 @@ public class TaxDetail {
         return taxableAmount.multiply(taxPercent).divide(BigDecimal.valueOf(100.0), 3, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal getNetValue() {
+        return taxableAmount;
+    }
+
+    public BigDecimal getGrossValue() {
+        return taxableAmount.add(getTaxValue());
+    }
+
 }

@@ -33,7 +33,7 @@ public class FileStorageService implements StorageService {
     private static final String INVOICES_SUFFIX = "invoices";
     private static final String EXPENSES_SUFFIX = "expenses";
     private static final String DONATIONS_SUFFIX = "donations";
-    private static final String[] EXPENSES_COLUMNS_ORDER = new String[]{"invoiceNumber", "particulars", "expenseTypeName", "grossValue", "dateFrom", "dateTo", "taxableAmount1", "taxPercent1", "taxableAmount2", "taxPercent2", "description"};
+    private static final String[] EXPENSES_COLUMNS_ORDER = new String[]{"invoiceNumber", "particulars", "expenseTypeName", "dateFrom", "dateTo", "taxableAmount1", "taxPercent1", "taxableAmount2", "taxPercent2", "description"};
     private static final String[] DONATIONS_COLUMNS_ORDER = new String[]{"dateFrom", "dateTo", "organisation", "registrationNo", "value"};
     private static final String[] INVOICES_COLUMNS_ORDER = new String[]{"customer", "dateIssued", "netValue", "particulars", "gstPercent", "withholdingTaxPercent", "datePaid"};
 
