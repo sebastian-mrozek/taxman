@@ -6,7 +6,6 @@ Based on a software engineering contractor life in NZ - hence NZ tax specific.
 A reason to build a Svelte app and avoid paying an accountant.
 
 TODO now:
-- simplify expense persistence and model (tax value)
 - configurable persistence folder location 
 - generate test data
 - tests for persistence - roundtrip test would cover ser/deser and mapping

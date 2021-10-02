@@ -11,12 +11,17 @@ export const INVOICE_INCOME_COLS: Column[] = [
       getText: (invoice) => dayjs(new Date(invoice.datePaid)).format("YYYY MMM D"),
     },
   },
-  { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },
+  { 
+    label: "Net Value", 
+    type: { getText: (invoice) => currency(invoice.netValue).format() },
+    alignRight: true
+  },
   {
     label: "Withholding Tax",
     type: {
       component: TaxView,
       getProps: (invoice) => invoice.withholdingTaxDetail,
     },
+    alignRight: true
   },
 ];

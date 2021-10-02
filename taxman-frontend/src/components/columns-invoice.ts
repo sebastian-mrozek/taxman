@@ -18,13 +18,18 @@ export const INVOICE_COLS: Column[] = [
       getText: (invoice) => dayjs(new Date(invoice.datePaid)).format("YYYY MMM D"),
     },
   },
-  { label: "Net Value", type: { getText: (invoice) => currency(invoice.netValue).format() } },
+  { 
+    label: "Net Value", 
+    type: { getText: (invoice) => currency(invoice.netValue).format() },
+    alignRight: true
+  },
   {
     label: "GST",
     type: {
       component: TaxView,
       getProps: (invoice) => invoice.gstDetail,
     },
+    alignRight: true
   },
   {
     label: "Total",
@@ -33,6 +38,7 @@ export const INVOICE_COLS: Column[] = [
         return currency(invoice.total).format();
       },
     },
+    alignRight: true
   },
   {
     label: "Withholding Tax",
@@ -40,6 +46,7 @@ export const INVOICE_COLS: Column[] = [
       component: TaxView,
       getProps: (invoice) => invoice.withholdingTaxDetail,
     },
+    alignRight: true
   },
   {
     label: "To pay",
@@ -48,5 +55,6 @@ export const INVOICE_COLS: Column[] = [
         return currency(invoice.toPay).format();
       },
     },
+    alignRight: true
   },
 ];

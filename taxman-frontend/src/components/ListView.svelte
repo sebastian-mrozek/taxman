@@ -5,6 +5,10 @@
   export let items: any[] = [];
   export let columns: Column[] = [];
   export let title: string;
+
+  var resolveClass = (column: Column) => {
+    return column.alignRight ? "align-right" : "";
+  }
 </script>
 
 <div class="panel shadowed rounded bordered">
@@ -14,7 +18,7 @@
       <thead>
         <tr>
           {#each columns as column}
-            <th>{column.label}</th>
+            <th class="{resolveClass(column)}">{column.label}</th>
           {/each}
         </tr>
       </thead>
@@ -49,5 +53,8 @@
   }
   .footer-slot {
     margin-top: 1em;
+  }
+  .align-right {
+    text-align: right;
   }
 </style>

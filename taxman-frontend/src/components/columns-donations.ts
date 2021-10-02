@@ -14,5 +14,5 @@ export const DONATION_COLS: Column[] = [
       },
     },
   },
-  { label: "Value", type: { getText: (donation) => currency(donation.value).format() } },
+  { label: "Value", type: { getText: (donation) => currency(donation.value).format() }, alignRight: true },
 ];

@@ -4,12 +4,16 @@
 
   export let item = undefined;
   export let columns: Column[] = [];
+
+  var resolveClass = (column: Column) => {
+    return column.alignRight ? "align-right" : "";
+  }
 </script>
 
 <tr>
   {#if item}
     {#each columns as column}
-      <td data-label={column.label}>
+      <td data-label={column.label} class="{resolveClass(column)}">
         {#if isFieldValue(column.type)}
           {item[column.type.field]}
         {:else if isFieldFunction(column.type)}
@@ -21,3 +25,8 @@
     {/each}
   {/if}
 </tr>
+<style>
+  .align-right {
+    text-align: right;
+  }
+</style>

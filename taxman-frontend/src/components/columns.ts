@@ -16,6 +16,7 @@ export type ColumnType = ColumnTypeFieldValue | ColumnTypeFieldFunction | Column
 export type Column = {
   label: string;
   type: ColumnType;
+  alignRight?: boolean;
 };
 
 export function isFieldValue(o: ColumnType): o is ColumnTypeFieldValue {

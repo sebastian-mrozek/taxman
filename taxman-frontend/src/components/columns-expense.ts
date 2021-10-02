@@ -16,7 +16,11 @@ export const EXPENSE_COLS: Column[] = [
       },
     },
   },
-  { label: "Gross value", type: { getText: (expense) => currency(expense.grossValue).format() } },
+  { 
+    label: "Gross value", 
+    type: { getText: (expense) => currency(expense.grossValue).format() },
+    alignRight: true
+  },
   {
     label: "GST",
     type: {
@@ -24,6 +28,7 @@ export const EXPENSE_COLS: Column[] = [
       //TODO: Enable multiple tax details display
       getProps: (expense) => expense.gstDetails[0],
     },
+    alignRight: true
   },
   { label: "Description", type: { field: "description" } },
 ];
