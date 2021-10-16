@@ -147,7 +147,7 @@ public class TaxReturnService {
 
     private List<Invoice> filterInvoices(List<Invoice> invoices, Period gstReturnPeriod) {
         return invoices.stream()
-                .filter(invoice -> Utils.isWithin(invoice.getDateIssued(), gstReturnPeriod))
+                .filter(invoice -> invoice.getDatePaid() != null && Utils.isWithin(invoice.getDatePaid(), gstReturnPeriod))
                 .collect(Collectors.toList());
     }
 
@@ -161,7 +161,6 @@ public class TaxReturnService {
     public BigDecimal calculateIncomeTaxPaid(List<Invoice> invoices) {
         return invoices.stream()
                 .map(Invoice::getWithholdingTaxDetail)
-                .filter(Objects::nonNull)
                 .map(TaxDetail::getTaxValue)
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
