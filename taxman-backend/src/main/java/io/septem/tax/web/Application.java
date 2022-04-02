@@ -41,7 +41,7 @@ public class Application {
     }
 
     public void start() {
-        server.start();
+        server.start(7777);
     }
 
     public void start(int port) {

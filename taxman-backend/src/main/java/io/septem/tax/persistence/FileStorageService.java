@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -87,6 +88,7 @@ public class FileStorageService implements StorageService {
             List<CsvInvoice> csvInvoices = readListCsv(fileName(INVOICES_SUFFIX, EXTENSION_CSV), CsvInvoice.class);
             return csvInvoices.stream()
                     .map(modelMapper::invoiceFromCsv)
+                    .sorted(Comparator.comparing(Invoice::getDateIssued))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             log.info("Error reading invoices: {}", e.getMessage(), e);
@@ -97,6 +99,7 @@ public class FileStorageService implements StorageService {
     public List<Invoice> listInvoices(int year) throws DataAccessException {
         return listInvoices().stream()
                 .filter(isForTaxYear(year, Invoice::getDatePaid))
+                .sorted(Comparator.comparing(Invoice::getDateIssued))
                 .collect(Collectors.toList());
     }
 
@@ -105,6 +108,7 @@ public class FileStorageService implements StorageService {
             List<CsvExpense> csvExpenses = readListCsv(fileName(EXPENSES_SUFFIX, EXTENSION_CSV), CsvExpense.class);
             return csvExpenses.stream()
                     .map(modelMapper::expenseFromCsv)
+                    .sorted(Comparator.comparing(Expense::getPeriod))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new DataAccessException("Error reading list of expenses", e);
@@ -115,6 +119,7 @@ public class FileStorageService implements StorageService {
     public List<Expense> listExpenses(int year) throws DataAccessException {
         return listExpenses().stream()
                 .filter(isForTaxYear(year, expense -> expense.getPeriod().getDateFrom()))
+                .sorted(Comparator.comparing(Expense::getPeriod))
                 .collect(Collectors.toList());
     }
 
@@ -123,6 +128,7 @@ public class FileStorageService implements StorageService {
             List<CsvDonation> csvDonations = readListCsv(fileName(DONATIONS_SUFFIX, EXTENSION_CSV), CsvDonation.class);
             return csvDonations.stream()
                     .map(modelMapper::donationFromCsv)
+                    .sorted(Comparator.comparing(Donation::getPeriod))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new DataAccessException("Error reading list of donations", e);
@@ -133,6 +139,7 @@ public class FileStorageService implements StorageService {
     public List<Donation> listDonations(int year) throws DataAccessException {
         return listDonations().stream()
                 .filter(isForTaxYear(year, donation -> donation.getPeriod().getDateFrom()))
+                .sorted(Comparator.comparing(Donation::getPeriod))
                 .collect(Collectors.toList());
     }
 

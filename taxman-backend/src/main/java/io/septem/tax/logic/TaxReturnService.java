@@ -8,7 +8,10 @@ import jakarta.inject.Singleton;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,8 +19,12 @@ import java.util.stream.Collectors;
 public class TaxReturnService {
 
     public TaxReturn calculateTaxReturn(TaxYear taxYear) {
-        List<Invoice> invoices = taxYear.getInvoices();
-        List<ExpenseClaim> expenseClaims = reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses());
+        List<Invoice> invoices = taxYear.getInvoices().stream()
+                .sorted(Comparator.comparing(Invoice::getCustomer))
+                .collect(Collectors.toList());
+        List<ExpenseClaim> expenseClaims = reconcileExpenseClaims(taxYear.getSetup().getExpenseTypes(), taxYear.getExpenses()).stream()
+                .sorted(Comparator.comparing(ec -> ec.getExpense().getPeriod().getDateFrom()))
+                .collect(Collectors.toList());
         BigDecimal incomeTaxPaid = calculateIncomeTaxPaid(invoices);
         BigDecimal netIncome = calculateNetIncome(invoices);
         BigDecimal totalExpensesClaim = calculateTotalExpensesClaim(expenseClaims);
@@ -25,7 +32,9 @@ public class TaxReturnService {
         BigDecimal incomeTax = calculateIncomeTax(taxYear.getSetup().getIncomeTaxRates(), profit);
         BigDecimal remainingIncomeTax = incomeTax.subtract(incomeTaxPaid);
         BigDecimal effectiveIncomeTaxPercent = calculateEffectiveIncomeTaxPercent(incomeTax, profit);
-        List<GstReturn> gstReturns = calculateGstReturns(taxYear);
+        List<GstReturn> gstReturns = calculateGstReturns(taxYear).stream()
+                .sorted(Comparator.comparing(gstReturn -> gstReturn.getPeriod().getDateFrom()))
+                .collect(Collectors.toList());
 
         return TaxReturn.builder()
                 .year(taxYear.getSetup().getLabel())
